@@ -2143,361 +2143,6 @@ Let $\alpha\in\mathbb{R}$. $]0,\infty[\,\,\rightarrow \,\,]0,\infty[ \,,\,\,x\ma
         monotone convergence and passage of increasing limits through
         finite sums.
     \end{proof}
-\section{Transition kernels and Fubini-Tonelli theorem}
-    \begin{define}
-        A \textit{transition kernel} from $E$ to $F$ is a function $\kappa:E\times\mathscr{F}\rightarrow [0,\infty]$ such that
-        \begin{tight_enumerate}
-            \item $\kappa(\ph,B):E\rightarrow [0,\infty]$ is measurable for all $B\in\mathscr{F}$.
-            \item $\kappa(x,\ph):\mathscr{F}\rightarrow [0,\infty]$ is a measure for all $x\in E$.
-        \end{tight_enumerate}
-    \end{define}
-    \begin{thm}
-        For $\nu:\mathscr{F}\rightarrow [0,\infty]$ a measure and $u:E\rightarrow \er_+$ measurable,
-        \[
-            \kappa:E\times\mathscr{F}\rightarrow [0,\infty],\,\,(x,B)\mapsto u(x)\cdot \nu(B)
-        \]
-        is a transition kernel from $E$ to $F$.
-    \end{thm}
-    \begin{thm}
-        If $(\kappa_n)_{n\in\mathbb{N}}$ is a sequence of transition kernels from $(E,\mathscr{E})$ to $(F,\mathscr{F})$, then
-        \[
-            \sum_{n=1}^\infty \kappa_n
-        \]
-        is also a transition kernel from $(E,\mathscr{E})$ to $(F,\mathscr{F})$.
-    \end{thm}
-    \begin{thm}
-        Let $\kappa:E\times\mathscr{F}\rightarrow [0,\infty]$ be a transition kernel from $E$ to $F$. Then
-        \begin{tight_enumerate}
-            \item for every $u\in\overline{\mathscr{F}}_+$,
-            \[
-                \bracket{\kappa}{u}:E\rightarrow \er_+,\,\,x\mapsto \int_{\kappa(x,\ph)}u
-            \]
-            is measurable, i.e., in $\overline{\mathscr{E}}_+$.
-            \item for every measure $\mu$ on $(E,\mathscr{E})$,
-            \[
-                \bracket{\mu}{\kappa}:\mathscr{F}\rightarrow [0,\infty],\,\,B\mapsto \int_\mu \kappa(\ph,B)
-            \]
-            is a measure on $(F,\mathscr{F})$.
-            \item for every $u\in \overline{\mathscr{F}}_+$ and every measure $\mu$ on $(E,\mathscr{E})$,
-            \begin{equation}\label{eq:associativity_of_kernel_operators}
-                \int_{\bracket{\mu}{\kappa}}u=\int_{\mu}\bracket{\kappa}{u}=\int_{\mu}\int_{\kappa(x,\ph)}u\odif y\odif x
-            \end{equation}
-        \end{tight_enumerate}
-    \end{thm}
-    Let $u\in \mathscr{E}/\mathscr{F}$ and $\kappa(x,B):=\mathbbm{1}_{\{u\in B\}}$. Then \eqref{eq:associativity_of_kernel_operators} states the general transformation theorem under pushforward of measures.
-\subsection{Characterization}
-    \begin{thm}
-        A \textit{transition kernel} from $(E,\mathscr{E})$ to $(F,\mathscr{F})$ is equivalently an operator $\kappa:\overline{\mathscr{F}}_+\rightarrow \overline{\mathscr{E}}_+$ satisfying
-        \begin{tight_enumerate}
-            \item $\kappa(0)=0$,
-            \item $\kappa(\alpha u+\beta v)=\alpha \kappa(u)+ \beta \kappa(v)$ for all $u,v\in \overline{\mathscr{F}}_+$ and $\alpha,\beta\in\mathbb{R}_+$,
-            \item $\kappa(u_n)\uparrow\kappa(u)$ whenever $u_n\uparrow u$ in $\overline{\mathscr{F}}_+$.
-        \end{tight_enumerate}
-    \end{thm}
-    \begin{proof}
-        Indeed, $\kappa(x,B)=\kappa(\mathbbm{1}_B)(x)$.
-    \end{proof}
-    \begin{thm}
-        \[
-            (\kappa_1\circ\kappa_2)(x,C)=\kappa_1(\kappa_2(\mathbbm{1}_C))(x)=\int_{\kappa_1(x,\ph)}\kappa_2(\mathbbm{1}_C)=\int_{\kappa_1(x,\odif y)}\kappa_2(y,C)
-        \]
-    \end{thm}
-\subsection{Classification}
-    \begin{define}
-        A transition kernel $\kappa:\overline{\mathscr{F}}_+\rightarrow \overline{\mathscr{E}}_+$ from $(E,\mathscr{E})$ to $(F,\mathscr{F})$ is called 
-        \begin{tight_enumerate}
-            \item a \textit{Markov kernel} if $\kappa(1)=1$.
-            \item a \textit{sub-Markov kernel} if $\kappa(1)\leqslant 1$.
-            \item a \textit{finite kernel} if $\kappa(1)(x)<\infty$ for all $x\in E$.
-            \item a \textit{bounded kernel} if $\kappa(1)$ is bounded.
-            \item a \textit{$\sigma$-finite kernel} if $\kappa(x,\ph)$ is a $\sigma$-finite measure for all $x\in E$.
-            \item a \textit{$\sigma$-bounded kernel} if there exists a countable measurable partition $F=F_1\sqcup F_2\sqcup \cdot$ such that $\kappa(\mathbbm{1}_{F_n})$ is bounded for all $n\in\mathbb{N}$.
-            \item a \textit{s-finite kernel} if $\kappa=\sum_{n=1}^\infty\kappa_n$ for a sequence $(\kappa_n)$ of finite kernels.
-            \item a \textit{s-bounded kernel} if $\kappa=\sum_{n=1}^\infty\kappa_n$ for a sequence $(\kappa_n)$ of bounded kernels.
-        \end{tight_enumerate}
-    \end{define}
-    \begin{thm}
-        Let $\iota:\overline{\mathscr{E}}_+\rightarrow \overline{\mathscr{E}}_+$ be the identity kernel. Then
-        \[
-            \iota(x,A)=\iota(\mathbbm{1}_A)(x)=\mathbbm{1}_A(x)=\delta_x(A)
-        \]
-    \end{thm}
-    It should be obvious that
-    \begin{thm}
-        If $\kappa:\overline{\mathscr{E}}_+\rightarrow \overline{\mathscr{E}}_+$ is a Markov kernel on $(E,\mathscr{E})$, then so are
-        \[
-            \kappa^0:=\iota,\quad\kappa^1:=\kappa,\quad\kappa^{n+1}=\kappa\circ\kappa^n,\quad n\geqslant 0
-        \]
-    \end{thm}
-    \begin{thm}
-        If $\kappa$ is a finite kernel from $(E,\mathscr{E})$ to $(F,\mathscr{F})$, then
-        \[
-            \hat{\kappa}:(x,B)\mapsto \frac{\kappa(x,B)}{h(x)}
-        \]
-        is a sub-Markov kernel, where
-        \[
-            h:x\mapsto 
-            % \begin{cases}
-            %     \kappa(x,F) &\text{if }\kappa(x,F)>0\\
-            %     1 &\text{otherwise}
-            % \end{cases} =
-            \kappa(x,F)\mathbbm{1}_{\{\kappa(\ph,F)>0\}}+\mathbbm{1}_{\{\kappa(\ph,F)=0\}}
-        \]
-        is measurable and strictly positive.
-    \end{thm}
-\subsection{Extension to measurable functions on the product space}
-    \begin{thm}\label{Extension to measurable functions on the product space}
-        Let $\kappa$ be a s-finite kernel from $(E,\mathscr{E})$ to $(F,\mathscr{F})$. Then for every $u\in \overline{\mathscr{E}\otimes\mathscr{F}}_+$, the function
-        \[
-            \bar{\kappa}(u):E\rightarrow\er_+,\,\,x\mapsto \int_{\kappa(x,\odif y)}u(x,y)
-        \]
-        is in $\overline{\mathscr{E}}_+$. Moreover, the operator $\bar{\kappa}:\overline{\mathscr{E}\otimes\mathscr{F}}_+\rightarrow \overline{\mathscr{E}}_+$ is linear and continuous under increasing limits, in the sense that
-        \begin{tight_enumerate}
-            \item $\bar{\kappa}(\alpha u+\beta v)=\alpha\bar{\kappa}(u)+\beta\bar{\kappa}(v)$,
-            \item $\bar{\kappa}(u_n)\uparrow \bar{\kappa}(u)$ for $u_n\uparrow u$ in $\overline{\mathscr{E}\otimes\mathscr{F}}_+$.
-        \end{tight_enumerate}
-    \end{thm}
-    \begin{proof}
-        Measurability of $y\mapsto u(x,y)$ for any fixed $x$ follows from Theorem \ref{sections are measurable}.
-        By Theorem \ref{integration w.r.t. a series of measures}, it suffices to show for $\kappa$ a finite kernel.
-        For $C\in\mathscr{E}\otimes\mathscr{F}$, write
-        $C_x=\{y\in F:(x,y)\in C\}\in\mathscr{F}=\{\mathbbm{1}_{C}(x,\ph)=1\}$, and define
-        \[
-        \mathscr{D}
-        =\left\{C\in\mathscr{E}\otimes\mathscr{F}:
-        x\mapsto\kappa(x,C_x)\text{ is measurable}\right\}.
-        \]
-        For every measurable rectangle $A\times B$,
-        \[
-        \kappa(x,(A\times B)_x)
-        =\mathbbm{1}_A(x)\kappa(x,B),
-        \]
-        so $\mathscr{D}$ contains all measurable rectangles, including
-        $E\times F$.
-        
-        If $C\in\mathscr{D}$, then
-        \[
-        \kappa(x,(C^c)_x)
-        =\kappa(x,F)-\kappa(x,C_x)
-        \]
-        is measurable, since both terms are finite measurable functions.
-        Thus $C^c\in\mathscr{D}$.
-        If $(C_n)_{n\geqslant1}$ is a sequence of pairwise disjoint
-        members of $\mathscr{D}$, then
-        \[
-        \kappa\left(x,\left(\bigsqcup_{n=1}^{\infty}C_n\right)_x\right)
-        =\sum_{n=1}^{\infty}\kappa(x,(C_n)_x)
-        \]
-        is measurable. Hence $\mathscr{D}$ is a Dynkin system.
-        Since measurable rectangles are $\cap$-stable, Theorem \ref{generators} gives $\mathscr{D}=\mathscr{E}\otimes\mathscr{F}$.
-        
-        Consequently, $\bar{\kappa}(u)$ is measurable when $u$ is
-        an indicator, and hence when $u$ is a positive simple
-        function, and hence for all $u$ positive measurable functions via monotone convergence theorem.
-    \end{proof}
-    The assumption of $s$-finiteness cannot be omitted. Let
-    \[
-        (E,\mathscr{E})=(\mathbb{R},\mathscr{B}(\mathbb{R})),
-        \qquad
-        (F,\mathscr{F})=(\mathbb{R},\mathscr{P}(\mathbb{R})),
-    \]
-    and let $\nu$ be counting measure on $\mathscr{P}(\mathbb{R})$. Define
-    \[
-        \kappa(x,B)=\nu(B),
-        \qquad x\in E,\quad B\in\mathscr{F}.
-    \]
-    Then $\kappa$ is a kernel, since $\kappa(x,\cdot)=\nu$ is a measure
-    for every $x\in E$, and $x\mapsto\kappa(x,B)$ is constant, hence
-    $\mathscr{E}$-measurable, for every $B\in\mathscr{F}$.
-    
-    Choose a non-Borel set $A\subseteq\mathbb{R}$ and define
-    \[
-        u(x,y)=\mathbbm{1}_{D}(x,y)\mathbbm{1}_{A}(y),
-        \qquad
-        D=\{(x,y)\in\mathbb{R}^2:x=y\}.
-    \]
-    The diagonal $D$ is closed, so
-    \[
-        D\in\mathscr{B}(\mathbb{R}^2)
-        =\mathscr{B}(\mathbb{R})\otimes\mathscr{B}(\mathbb{R})
-        \subseteq\mathscr{E}\otimes\mathscr{F}.
-    \]
-    Moreover, $\mathbb{R}\times A\in\mathscr{E}\otimes\mathscr{F}$.
-    Thus $u=\mathbbm{1}_{D\cap(\mathbb{R}\times A)}$ belongs to
-    $\overline{\mathscr{E}\otimes\mathscr{F}}_+$. However,
-    \[
-        x\mapsto \int_{\kappa(x,\odif y)}u(x,y)
-        =\int_{\nu(\odif y)}
-            \mathbbm{1}_{\{x\}}(y)\mathbbm{1}_{A}(y)
-        =\mathbbm{1}_{A}(x),
-    \]
-    which is not $\mathscr{E}$-measurable.
-    
-    Finally, $\kappa$ is not $s$-finite. Otherwise, fixing any $x\in E$
-    would express $\nu$ as a countable sum of finite measures. Each
-    finite measure assigns strictly positive mass to at most countably
-    many singletons, so such a sum does as well. This contradicts
-    $\nu(\{y\})=1$ for every $y\in\mathbb{R}$.
-\subsection{Measures on the product space}
-    \begin{thm}\label{measures on the product space}
-        Let $\mu$ be a measure on $(E,\mathscr{E})$, and let $\kappa$
-        be an s-finite transition kernel from $(E,\mathscr{E})$
-        to $(F,\mathscr{F})$. Then there exists a unique measure $\pi$ on the product space
-        $(E\times F,\mathscr{E}\otimes\mathscr{F})$ such that
-        \begin{equation}\label{measure on the product space, integral form}
-        \int_\pi u
-        =\int_{\mu(\odif x)}\int_{\kappa(x,\odif y)}u(x,y)
-        \qquad
-        \forall u\in\overline{\mathscr{E}\otimes\mathscr{F}}_+
-        \end{equation}
-        Moreover, if $\mu$ is $\sigma$-finite and $\kappa$ is
-        $\sigma$-bounded, then $\pi$ is $\sigma$-finite and is
-        the unique measure on that product space satisfying
-        \begin{equation}\label{measure on the product space, set function form}
-        \pi(A\times B)
-        =\int_{\mu(\odif x)}\mathbbm{1}_A(x)\cdot \kappa(x,B)\qquad \forall A\in\mathscr{E}\quad\forall B\in\mathscr{F}
-        \end{equation}
-    \end{thm}
-    \begin{proof}
-        If $u_n$ is an increasing sequence in $\overline{\mathscr{E}\otimes\mathscr{F}}_+$, then $(x\mapsto \int_{\kappa(x,\odif y)}u_n(x,y))_{n\in\mathbb{N}}$ is an increasing sequence of measurable functions by Theorem \ref{Extension to measurable functions on the product space} ($s$-finiteness of the kernel is required here). Thus, repeated application of the monotone convergence theorem shows that \eqref{measure on the product space, integral form} defines a measure on the product space via Theorem \ref{Characterization of measures via integrals}.
-
-        To prove the second, start by observing that $\pi$ satisfies
-        \eqref{measure on the product space, set function form}.
-        Supposing that $\mu$ is $\sigma$-finite and $\kappa$ is $\sigma$-bounded,
-        there remains to show that $\pi$ is $\sigma$-finite and is the only measure
-        satisfying \eqref{measure on the product space, set function form}.
-        To that end, let $\hat{\pi}$ be another measure satisfying
-        \eqref{measure on the product space, set function form}.
-        Since $\mu$ is $\sigma$-finite, there is a measurable partition $(E_m)$
-        of $E$ such that $\mu(E_m)<\infty$ for each $m$.
-        Since $\kappa$ is $\sigma$-bounded, there is a measurable partition $(F_n)$
-        of $F$ such that $x\mapsto\kappa(x,F_n)$ is bounded for each $n$.
-        Note that the measurable rectangles $E_m\times F_n$ form a partition
-        of $E\times F$ and that, by the formula
-        \eqref{measure on the product space, set function form}
-        for $\pi$ and $\hat{\pi}$,
-        \[
-            \pi(E_m\times F_n)=\hat{\pi}(E_m\times F_n)<\infty
-        \]
-        for each $m$ and $n$. Use Theorem \ref{uniqueness theorem}.
-    \end{proof}
-    Repeated application of Theorem \ref{measures on the product space} yields
-    \begin{thm}
-        Let $\mu$ be a measure on $(E_1,\mathscr{E}_1)$, $\kappa_i$
-        an s-finite transition kernel from $(E_1\times\cdots\times E_i,\mathscr{E}_1\times\cdots\times\mathscr{E}_i)$
-        to $(E_{i+1},\mathscr{E}_{i+1})$ for $i=1,\dots,n-1$. Then there exists a unique measure $\pi$ on the product space
-        $(E_1\times\cdots\times E_n,\mathscr{E}_1\otimes\cdots\otimes \mathscr{E}_n)$ such that for all $u\in\overline{\mathscr{E}_1\otimes\cdots\otimes \mathscr{E}_n}_+$
-        \[
-        \int_\pi u
-        =\int_{\mu(\odif{x_1})}\int_{\kappa_1(x_1,\odif{x_2})}\cdots \int_{\kappa_{n-1}(x_1,\dots,x_{n-1},\odif{x_n})}u(x_1,\dots,x_{n-1},x_n)
-        \]
-    \end{thm}
-    In this case, the measure $\pi$ may be denoted by $\mu(\odif{x_1})\kappa_1(x_1,\odif{x_2})\cdots\kappa_{n-1}(x_1,\dots,x_{n-1},\odif{x_n})$.
-\subsection{Transition densities}
-    Ex6.30 of chapter I of GTM261.
-\subsection{Fubini-Tonelli theorem}
-    \begin{thm}\label{Fubini-Tonelli}
-        Let $\mu$ and $\nu$ be $s$-finite measures on $(E,\mathscr{E})$ and $(F,\mathscr{F})$ respectively. 
-
-        Then there exists a unique measure $\pi$ on the product space $(E\times F,\mathscr{E}\otimes \mathscr{F})$ such that 
-        \begin{equation}\label{Fubini's measure formula}
-            \int_\pi u=\int_{\mu(\odif x)}\int_{\nu(\odif y)} u(x,y)=\int_{\nu(\odif y)}\int_{\mu(\odif x)} u(x,y)\qquad \forall u\in \overline{\mathscr{E}\otimes\mathscr{F}}_+
-        \end{equation}
-        Moreover, $\pi$ is $s$-finite; if $\mu$ and $\nu$ are $\sigma$-finite, then $\pi$ is $\sigma$-finite, and is the unique measure on that product space satisfying
-        \begin{equation}\label{product measure formula}
-            \pi(A\times B)=\mu(A)\cdot \nu(B)\qquad \forall A\in\mathscr{E}\quad\forall B\in\mathscr{F}
-        \end{equation}
-    \end{thm}
-    \begin{proof}
-        Let $h:F\times E\rightarrow E\times F,\,\,(y,x)\mapsto (x,y)$, which is clearly measurable. 
-        By Theorem \ref{measures on the product space}, there exists a unique measure 
-        $\pi$ on $(E\times F,\mathscr{E}\otimes \mathscr{F})$ satisfying 
-        $\int_\pi u=\int_{\mu}\int_{\nu} u$ for all $u\in \overline{\mathscr{E}\otimes\mathscr{F}}_+$,
-        as well as a unique measure $\tilde{\pi}$ on $(F\times E,\mathscr{F}\otimes \mathscr{E})$ satisfying $\int_{\tilde{\pi}} v=\int_{\nu}\int_{\mu} v$ for all $v\in \overline{\mathscr{F}\otimes\mathscr{E}}_+$. 
-        In particular, $\pi(A\times B)=\mu(A)\cdot \nu(B)=\tilde{\pi}(B\times A)=h_*\tilde{\pi}(A\times B)$ for all $A\in\mathscr{E}, B\in\mathscr{F}$.  
-        If $\mu$, $\nu$ are $\sigma$-finite, then Theorem \ref{measures on the product space} applies with the $\sigma$-bounded kernel $\kappa(x,B):=\nu(B)$ to give the second part of the theorem, from which follows $\pi=h_*\tilde{\pi}$ and hence $\int_{\mu}\int_{\nu} u=\int_{h_*\tilde{\pi}} u=\int_{\tilde{\pi}} u\circ h=\int_{\nu}\int_{\mu} u\circ h$. That is, \eqref{Fubini's measure formula} holds for $\mu,\nu$ $\sigma$-finite, and in particular, for $\mu,\nu$ finite. By Theorem \ref{integration w.r.t. a series of measures}, if $\mu=\sum_i\mu_i$ and $\nu=\sum_j\nu_j$, then $\int_\pi u=\int_{\mu}\int_{\nu} u=\sum_i\sum_j\int_{\mu_i}\int_{\nu_j}u=\sum_i\sum_j\int_{\nu_j}\int_{\mu_i}u=\sum_j\sum_i\int_{\nu_j}\int_{\mu_i}u=\int_{\nu}\int_{\mu} u$, from which it is clear that $\pi=\sum_{i,j}\mu_i\times\nu_j$ is $s$-finite, where $\mu_i\times\nu_j$ is the unique measure defined by $\int_{\mu_i\times\nu_j}u=\int_{\mu_i}\int_{\nu_j}u$.
-    \end{proof}
-    Repeated application of Theorem \ref{Fubini-Tonelli} yields
-    \begin{thm}
-        Let $\mu_1,\dots,\mu_n$ be $s$-finite measures on $(E_1,\mathscr{E}_1),\dots,(E_n,\mathscr{E}_n)$ respectively. Then there exists a unique measure $\pi$ on the product space $(E_1\times \cdots\times E_n,\mathscr{E}_1\otimes\cdots\otimes\mathscr{E}_n)$ such that
-        \[
-            \int_\pi u=\int_{\mu(\odif{x_1})}\int_{\mu(\odif{x_2})}\cdots \int_{\mu(\odif{x_n})} u(x_1,x_2,\dots,x_n)\qquad \forall u\in\overline{\mathscr{E}_1\otimes\cdots\otimes\mathscr{E}_n}_+
-        \]
-        and the integrals on the right side can be performed in any order desired.
-    \end{thm}
-    Without the assumption of $s$-finiteness, the theorem may not hold. Let $E=F=[0,1]$ and $\mathscr{E}=\mathscr{F}=\mathscr{B}([0,1])$. Let $\lambda$ be the Lebesgue measure on $\mathscr{E}$ and $\nu$ the counting measure on $\mathscr{F}$.
-    Define
-    \[
-        D=\{(x,y)\in [0,1]^2:x=y\}.
-    \]
-    Then
-    \[
-        \int_{\lambda(\odif x)}\int_{\nu(\odif y)} \mathbbm{1}_{D}(x,y)=1\neq 0=\int_{\nu(\odif y)} \int_{\lambda(\odif x)}\mathbbm{1}_{D}(x,y)
-    \]
-    despite that $x\mapsto \int_{\nu(\odif y)} \mathbbm{1}_{D}(x,y)\equiv 1$ and $y\mapsto \int_{\lambda(\odif x)}\mathbbm{1}_{D}(x,y)\equiv 0$ are measurable.
-    % \begin{thm}
-    % Let $\mathscr{A}=\sigma(\mathscr{F})$ and $\mathscr{B}=\sigma(\mathscr{G})$. If $\mathscr{F}$ exhausts  $X$ and $\mathscr{G}$ exhausts $Y$, then
-    % \[\mathscr{A}\otimes \mathscr{B}=\sigma(\mathscr{F}\times \mathscr{G})\]
-    % \end{thm}
-    \begin{thm}
-        Let $\mathscr{A}=\sigma(\mathscr{F})$ and $\mathscr{B}=\sigma(\mathscr{G})$. If 
-        \begin{enumerate}
-            \item $\mathscr{F},\mathscr{G}$ are $\cap$-closed.
-            \item $\{\mu|_\mathscr{F}<\infty\}$ exhausts $X$ and $\{\nu|_\mathscr{G}<\infty\}$ exhausts $Y$.
-        \end{enumerate}
-        then there exists at most one measure $\rho$ on $(X\times Y,\mathscr{A}\otimes \mathscr{B})$ satisfying
-        \[
-            \rho(F\times G)=\mu(F)\cdot \nu(G)
-        \]
-    \end{thm}
-    \begin{crl}
-        If $n>d\geqslant 1$, then
-        \[(\mathbb{R}^n,\mathscr{B}(\mathbb{R}^n),\lambda^n)=\left(\mathbb{R}^d\times \mathbb{R}^{n-d},\mathscr{B}(\mathbb{R}^d)\otimes \mathscr{B}(\mathbb{R}^{n-d}),\lambda^d\times \lambda^{n-d}\right)\]
-    \end{crl}
-\subsection{The tail formula}
-    \begin{thm}\label{thm:tail_formula}
-        Let $\mu$ be an $s$-finite measure on $(E,\mathscr{E})$ and $u\in\mf{E}_+$.
-        \begin{equation}\label{eq:tail_formula}
-            \int_\mu u=\int_0^\infty \mu(\{u>t\})\odif t
-        \end{equation}
-        If $\varphi:\mathbb{R}_+\rightarrow\mathbb{R}_+$ with $\varphi(0)=0$ is increasing and continuously differentiable, then
-        \begin{equation}\label{eq:tail_formula_generalized}
-            \int_\mu \varphi\circ u=\int_0^\infty \varphi'(t)\mu\{u\geqslant t\}\odif t
-        \end{equation}
-    \end{thm}
-    \begin{proof}
-        $\int_0^\infty \mu(\{u>t\})\odif t=\int_0^\infty (\int_\mu\mathbbm{1}_{\{u>t\}})\odif t=\int_{\mu(\odif x)}(\int_0^\infty\mathbbm{1}_{\{u>t\}}(x)\odif t)=\int_\mu u$ since for fixed $x\in E$ I have $\mathbbm{1}_{\{u>t\}}(x)=(t<u(x))\,?\, 1 :0$.
-
-        For $x\in E$ fixed, $\varphi(u(x))=\int_0^{u(x)}\varphi'(t)\odif t=\int_0^\infty \varphi'(t)\mathbbm{1}_{\{u>t\}}(x)\odif t$. Fubini's theorem then applies to $\mu\times \lambda_{\mathbb{R}_+}$.
-    \end{proof}
-    \begin{crl}
-        Let $u\in\mathcal{M}(\mathscr{A};\mathbb{R})$.
-        \[\|u\|_p^p=\int |u|^p\odif \mu=\int_0^\infty ps^{p-1}\mu\{|u|\geqslant s\}\odif s\]
-    \end{crl}
-\subsection{Moments of positive random variables}
-    \begin{thm}
-        Let $X$ be a $\er_+$-valued random variable. For $p>0$,
-        \[
-            \mathbb{E}(X^p)=\int_0^\infty px^{p-1}\mathbb{P}(\{X>x\})\odif x
-        \]
-        In particular, for $X$ taking values in $\overline{\mathbb{Z}}_+=\mathbb{N}\cup\{0,\infty\}$,
-        \[
-            \mathbb{E}X=\sum_{n=0}^\infty \mathbb{P}(\{X>n\}),\quad \mathbb{E}(X^2)=2\sum_{n=0}^\infty n\cdot \mathbb{P}(\{X>n\})+\mathbb{E}X
-        \]
-    \end{thm}
-    \begin{proof}
-        For $\omega\in \Omega$ fixed, $X^p(\omega)=\int_0^{X(\omega)}px^{p-1}=\int_0^\infty px^{p-1}\mathbbm{1}_{\{X>x\}}(\omega)$. Fubini's theorem then applies to $\mathbb{P}\times \lambda_{\mathbb{R}_+}$.
-    \end{proof}
-\subsection{Error Function}
-    \[\int_{\mathbb{R}_+} e^{-t^2}\odif \lambda^1=\frac{\sqrt{\pi}}{2}\]
-    \begin{proof}
-        Let $I=\displaystyle \int_{\mathbb{R}_+} e^{-t^2}\odif \lambda^1$.
-        \begin{align*}
-            I^2&=\int_{\mathbb{R}_+} \left(\int_{\mathbb{R}_+} e^{-x^2}\lambda^1(\odif x)\right) e^{-y^2}\lambda^1(\odif y)\\
-            &=\int_{\mathbb{R}_+} \int_{\mathbb{R}_+} e^{-(x^2+y^2)}\lambda^1(\odif x)\lambda^1(\odif y)
-        \end{align*}
-    \end{proof}
-    \[\operatorname{erf} z:=\frac{2}{\sqrt{\pi}}\int_{\mathbb{R}_+} e^{-t^2}\cdot\mathbbm{1}_{[0,z[}\odif \lambda^1\]
 \section{Integrability}
     \begin{define}
         A function $u:E\rightarrow \er$ is \textit{$\mu$-quasi-integrable} if it is measurable and
@@ -2704,32 +2349,6 @@ Let $\alpha\in\mathbb{R}$. $]0,\infty[\,\,\rightarrow \,\,]0,\infty[ \,,\,\,x\ma
 
         The case when $\int v^+<\infty$ is similar. If $\int u^-=\infty$ and $\int v^+=\infty$, then both $u\cdot\mathbbm{1}_{\{u>v\}}$ and $v\cdot\mathbbm{1}_{\{u>v\}}$ are integrable. By Theorem \ref{partial converse to isotonicity and insensitivity for integrable functions}, $u\cdot\mathbbm{1}_{\{u>v\}}\leqslant v\cdot\mathbbm{1}_{\{u>v\}}$ a.e. Thus, $\{u>v\}$ is null.
     \end{proof}
-\subsection{Fubini's theorem}
-    Let $\mu$ be a measure on $X$ and $\nu$ a measure on $Y$.
-    \begin{thm}
-        If $\mu$ and $\nu$ are $\sigma$-finite, then 
-        \begin{tight_enumerate}
-            \item for all $u\in\mathcal{M}(\mathscr{A}\otimes\mathscr{B};\overline{\mathbb{R}}_+)$, the functions
-            \[
-                y\mapsto \int u(x,y)\mu(dx),\quad x\mapsto \int u(x,y)\nu(dy)
-            \]
-            are measurable and
-            \[
-                \int u\odif (\mu\times\nu)=\iint u(x,y)\mu(\odif x)\nu(\odif y)=\iint u(x,y)\nu(\odif y)\mu(\odif x)
-            \]
-            \item for all $u\in\mathcal{M}(\mathscr{A}\otimes\mathscr{B};\mathbb{K})$, if at least one of the integrals
-            \[\int |u|\odif(\mu\times\nu),\quad \iint |u(x,y)|\mu(\odif x)\nu(\odif y),\quad \iint |u(x,y)|\nu(\odif y)\mu(\odif x)\]
-            $<\infty$ then all three integrals $<\infty$, $u\in L^1_\mathbb{K}(\mu\times\nu)$, and
-            \begin{gather*}
-                u(\bullet,y)\in L^1_\mathbb{K}(\mu)\text{ for $\nu$-a.a. }y\in Y\\
-                u(x,\bullet)\in L^1_\mathbb{K}(\nu)\text{ for $\mu$-a.a. }x\in X\\
-                y\mapsto \int u(x,y)\mu(d x)\text{ is a measurable $\nu$-almost function }Y\rightarrow \mathbb{K}\text{ and is in }L^1_\mathbb{K}(\nu)\\
-                x\mapsto \int u(x,y)\mu(d y)\text{ is a measurable $\mu$-almost function }X\rightarrow \mathbb{K}\text{ and is in }L^1_\mathbb{K}(\mu)\\
-                \int u\odif (\mu\times\nu)=\iint u(x,y)\mu(\odif x)\nu(\odif y)=\iint u(x,y)\nu(\odif y)\mu(\odif x)
-            \end{gather*}
-        \end{tight_enumerate}
-    \end{thm}
-\subsection{*For Complete Sigma-Finite measures}
 \subsection{The sine integral}
     \[\lim_{T\to\infty}\int_0^T \frac{\sin\xi}{\xi}\odif \xi=\frac{\pi}{2}\]
     \begin{proof}
@@ -2832,6 +2451,326 @@ Let $\alpha\in\mathbb{R}$. $]0,\infty[\,\,\rightarrow \,\,]0,\infty[ \,,\,\,x\ma
 \subsection{*A More General Version of Green's Theorem}
 \subsection{*Cauchy's Integral Theorem}
 \subsection{*Pompeiu's Formula}
+\section{Convergence theorems and integral calculus}
+\subsection{Dominated convergence}
+    \begin{thm}\label{dominated convergence theorem}
+        Let $(u_n)\in\cat{Mes}(X,\mathbb{K})^\mathbb{N}$. If
+        \begin{tight_enumerate}
+            \item there exists $w\in\mathfrak{L}_\mathbb{R}^1(\mu)$ such that $|u_n|\leqslant w\,\,\mu$-a.e. for all $n\in\mathbb{N}$,
+            \item there exists $u\in\cat{Mes}(X,\mathbb{K})$ such that $u_n\to u$ $\mu$-a.e.,
+        \end{tight_enumerate}
+        then $u_n\in\mathfrak{L}^1_\mathbb{K}(\mu)$ for all $n\in\mathbb{N}$, $u\in\mathfrak{L}^1_\mathbb{K}(\mu)$, and the following holds:
+        \begin{gather*}
+            \lim_{n\to\infty}\int |u_n-u|\odif\mu=0 \\
+            \lim_{n\to\infty}\int u_n\odif\mu=\int u\odif\mu
+        \end{gather*}
+    \end{thm}
+    % Remark. The theorem still holds for $\mathbb{K}=\er$ by using the usual identification of integrable $\er$-valued functions with integrable $\mathbb{R}$-valued functions, since $N=\{|w|=\infty\}\cup \{|u|=\infty\} \cup \bigcup{n=1}^\infty\{|u_n|=\infty\}$ has to be $\mu$-null (as a consequence of the existence of a $\mu$-integrable positive function $w\in\mathfrak{L}^1_{\er})$.
+    \begin{proof}
+        Since a countable union of $\mu$-null sets is $\mu$-null, there exists $N\in\mathscr{N}_\mu$ such that $|u_n\one_{N^c}|\leqslant w \one_{N^c}\leqslant w$ for all $n\in\mathbb{N}$ and $(u_n\one_{N^c})\to u\one_{N^c}$. Thus, $u_n\one_{N^c}$ and hence $u_n$ are integrable. Since $|\sph|:\mathbb{K}\rightarrow\mathbb{R}$ is continuous, $|u\one_{N^c}|=\lim_{n\to\infty}|u_n\one_{N^c}|\leqslant w$. Thus, $u\one_{N^c}$ and hence $u$ are integrable. Since $|u_n-u|\one_{N^c}\leqslant 2w$ for all $n\in\mathbb{N}$, applying Fatou's theorem to the sequence $(2w-|u_n-u|\one_{N^c})\in\mathfrak{L}^1_{\mathbb{R}_+}(\mu)^\mathbb{N}$ yields $\int 2w\odif \mu\leqslant \varliminf_{n\to\infty} \int (2w-|u_n-u|\one_{N^c})\odif \mu=\int 2w\odif \mu- \varlimsup_{n\to\infty} \int |u_n-u|\one_{N^c}\odif \mu$. So $0\leqslant \varliminf_{n\to\infty} \int |u_n-u|\one_{N^c}\odif \mu\leqslant \varlimsup_{n\to\infty} \int |u_n-u|\one_{N^c}\odif \mu=0$. Theorem \ref{triangle inequality 1}.
+    \end{proof}
+    % \begin{remark}
+    %     If $(u_n(x))$ converges in $\mathbb{K}$ for $\mu$-almost all $x\in X$, then there exists $N\in\mathscr{N}_\mu$ such that $u=\lim_{n\to\infty}u_n\one_{N^c}$ is a function $X\rightarrow \mathbb{K}$. Since $\cat{Mes}(X,\mathbb{K})$ is sequentially closed, $u$ is a measurable function such that $u_n\to u$ $\mu$-a.e..
+    % \end{remark}
+    Alternative presentation: \textbf{Actually not good since that the limit is taken in the topology of pointwise convergence is not obvious:}
+    \begin{thm}
+        Let $(u_n)\in\cat{Mes}(X,\mathbb{K})^\mathbb{N}$. If
+        \begin{tight_enumerate}
+            \item there exists a $\mu$-integrable $w\in L^1_\mathbb{R}(\mu)$ such that $|u_n|\leqslant w\,\,\mu$-a.e. for all $n\in\mathbb{N}$,
+            \item $(u_n)$ converges $\mu$-a.e.,
+        \end{tight_enumerate}
+        then $u_n\in L^1_\mathbb{K}(\mu)$ for all $n\in\mathbb{N}$, $\lim_{n\to\infty} u_n\in {L}^1_\mathbb{K}(\mu)$, and the following holds:
+        \begin{gather*}
+            \lim_{n\to\infty}\int \left|u_n-\lim_{n\to\infty} u_n\right|\odif\mu=0 \\
+            \lim_{n\to\infty}\int u_n\odif\mu=\int \lim_{n\to\infty} u_n\odif\mu
+        \end{gather*}
+    \end{thm}
+    \begin{crl}
+        Let $u:X\rightarrow \mathbb{K}$ be $\mu$-integrable over $A\in\Sigma X$. If
+        \[
+            A=\bigcup_{n=1}^\infty A_n
+        \]
+        for $(A_n)\in\Sigma X^\mathbb{N}$ with $A_i\cap A_j\in\mathscr{N}_\mu$ for all $i,j\in\mathbb{N}$ distinct, then
+        \[
+            \int _Au\odif \mu=\sum_{n=1}^\infty\int_{A_n}u\odif\mu
+        \]
+    \end{crl}
+    \begin{proof}
+        
+    \end{proof}
+\subsection{Parameter-dependent integrals}
+    \begin{thm}\label{continuity of parameter-dependent integral}
+        Let $T$ be a first-countable space and $f:T\times X\rightarrow \mathbb{K}$ a function. Let $t_0\in T$. If
+        \begin{tight_enumerate}
+            \item $f(t,\ph)\in L^1_{\mathbb{K}}$ for all $t\in T$.
+            \item $f(\ph,x):T\rightarrow \mathbb{K}$ is continuous at $t_0$ for $\mu$-almost all $x\in X$.
+            \item there exists a neighborhood $U$ of $t_0$ and a $\mu$-integrable function $g\in L^1_\mathbb{R}$ such that $|f(t,x)|\leqslant g(x)$ for all $t\in U$ and $\mu$-almost all $x\in X$.
+        \end{tight_enumerate}
+        then the function
+        \[
+            F:T\rightarrow \mathbb{K},\,\,t\mapsto \int f(t,\bullet )\odif \mu
+        \]
+        is continuous at $t_0$, and also the function
+        \[
+            \Phi:T\rightarrow \mathfrak{L}^1_{\mathbb{K}},\,\,t\mapsto f(t,\bullet)
+        \]
+        is continuous at $t_0$.
+    \end{thm}
+    \begin{proof}
+        Let $(t_n)$ be a sequence in $U$ tending to $t_0$, so $|f(t_n,\bullet)|\leqslant g$ $\mu$-a.e.. Since $f(\bullet,x)$ is continuous at $t_0$ for almost all $x\in X$, $f(t_n,\bullet)\to f(t_0,\bullet)$ $\mu$-a.e.. By dominated convergence, $F(t_n)\to F(t_0)$. By first-countability (hereditary) of $U$, $F(t)$ is continuous at $t_0$ in $U$, and hence in $T$.
+    \end{proof}
+    \begin{thm}\label{differentiability of parameter-dependent integral}
+        Let $]a,b[\,\,\subset\mathbb{R}$ and $f:\,\,]a,b[\,\,\times X\rightarrow\mathbb{R}$ a function. Let $t_0\in\,\,]a,b[$. If
+        \begin{tight_enumerate}
+            \item $f(t,\bullet)\in L^1_\mathbb{R}$ for all $t\in \,\,]a,b[$,
+            \item the partial derivative $\displaystyle \pdv{f}{t}$ exists at $(t_0,x)$ for all $x\in X$,
+            \item there exist a neighborhood $U$ of $t_0$ and $g\in L^1_\mathbb{R}$ such that for all $t\in U\setminus\{t_0\}$ and $\mu$-a.a. $x\in X$
+            \[
+                \left|\frac{f(t,x)-f(t_0,x)}{t-t_0}\right|\leqslant g(x)
+            \]
+        \end{tight_enumerate}
+        then the function
+        \[F:\,\,]a,b[\,\,\rightarrow \mathbb{R},\,\,t\mapsto \int f(t,\bullet)\odif\mu\]
+        is differentiable at $t_0$, the function $\displaystyle \pdv{f}{t}(t_0,\bullet)\in L^1_\mathbb{R}$ and
+        \[
+            F'(t_0)=\odv{}{t}_{t_0}\int f(t,\bullet)\odif\mu=\int \pdv{f}{t}(t_0,\bullet)\odif\mu
+        \]
+    \end{thm}
+    \begin{proof}
+        Let $(t_n)$ be a sequence in $U\setminus \{t_0\}$ tending to $t_0$, so $u_n=(f(t_n,\bullet)-f(t_0,\bullet))/(t_n-t_0)\leqslant g$ $\mu$-a.e.. Since the partial derivative exists at $(t_0,x)$ for all $x$, $u_n\to\pdv{f}{t}(t_0,\bullet)$ (pointwise).
+    \end{proof}
+\subsection{**Holomorphic Dependence of the Integral on a Complex Parameter}
+\subsection{**Scheff\'{e}'s Lemma}
+    $||a|-|b||\leqslant |a-b|$.
+\subsection{The Lebesgue measure}
+    The following subsections concern functions $f:X\rightarrow \mathbb{K}$ with $X\in \mathscr{L}^p$, and $X$ is equipped with the trace $\sigma$-algebra $\mathscr{L}^p|_X$. As usual, the codomain is equipped with the Borel $\sigma$-algebra $\mathscr{B}\mathbb{K}$.
+    \begin{thm}
+        For $X\in \mathscr{L}^p$,
+        \[
+            \mathscr{L}^p|_X=\{A\in \mathscr{L}^p\,|\,A\subset X\}
+        \]
+    \end{thm}
+    \begin{thm}
+        $\cat{Mes}(X,\mathbb{K})$ is a $\mathbb{K}$-algebra. $f\in \cat{Mes}(X,\mathbb{K})\Longrightarrow |f|\in \cat{Mes}(X,\mathbb{K})$. $\cat{Mes}(X,\mathbb{R})$ is a lattice. 
+    \end{thm}
+    \begin{thm}
+        If $f:X\rightarrow \mathbb{K}$ is continuous, then $f\in\cat{Mes}((X,\mathscr{B}^p|_X),\mathbb{K})\subset\cat{Mes}((X,\mathscr{L}^p|_X),\mathbb{K})$.
+    \end{thm}
+    \begin{proof}
+        A continuous map is $\mathscr{B}A/\mathscr{B}\mathbb{K}$-measurable, i.e., $\mathscr{B}^p|_A/\mathscr{B}\mathbb{K}$-measurable, but $\mathscr{B}^p|_A\subset \mathscr{L}^p|_A$.
+    \end{proof}
+    \begin{thm}
+        If $f:I\rightarrow \mathbb{R}$ is monotone, where $I\subset \mathbb{R}$ is an interval, then $f\in\cat{Mes}(I,\mathbb{K})$.
+    \end{thm}
+    \begin{proof}
+        $f^{-1}([y,\infty[)$ is a subinterval of $I$. Recall Theorem \ref{measurable functions}.
+    \end{proof}
+    \begin{define}
+        Let $X\in\mathscr{L}^p$. A function $f:X\rightarrow\mathbb{K}$ is \textit{integrable} if it is $\lambda^p|_{\mathscr{L}^p|_X}$-integrable.
+    \end{define}
+\subsection{The fundamental theorem of calculus}
+    \begin{thm}\label{antiderivative of a continuous function}
+        If $f:\mathbb{R}\rightarrow \mathbb{K}$ is continuous, then for any fixed $a\in\mathbb{R}$ the function
+        \[
+            F_a:\mathbb{R}\rightarrow \mathbb{K},\,\,t\mapsto \int_a^t f:=\begin{cases}
+                \displaystyle\int_{\lambda}f\cdot\mathbbm{1}_{[a,t[} & \text{for }t\geqslant a\\
+                -\displaystyle\int_{\lambda}f\cdot\mathbbm{1}_{[t,a[} & \text{for }t< a
+            \end{cases}
+        \]
+        is differentiable with $F_a'=f$.
+    \end{thm}
+    \begin{proof}
+        Since $f$ is continuous, it is integrable over every compact
+        interval, so $F_a$ is well-defined.
+        Fix $t\in\mathbb{R}$. For every $h\neq0$, additivity of
+        the integral gives
+        \[
+            \frac{F_a(t+h)-F_a(t)}{h}-f(t)
+            =\frac1h\int_t^{t+h}\bigl(f(x)-f(t)\bigr)\,dx.
+        \]
+        Consequently,
+        \[
+            \left|
+                \frac{F_a(t+h)-F_a(t)}{h}-f(t)
+            \right|
+            \leqslant
+            \sup_{|x-t|\leqslant |h|}|f(x)-f(t)|
+            \to 0
+            \qquad \text{as }h\to0
+        \]
+        by continuity of $f$ at $t$ (Cauchy criterion).
+    \end{proof}
+    \begin{thm}
+        Let $-\infty<a<b<\infty$ and $f:\,\,]a,b[\,\,\rightarrow\mathbb{K}$ a differentiable function.
+        
+        If $f'$ is bounded, then $f'\in L^1(]a,b[)$, the limits
+        \[
+            f(a):=\lim_{x\downarrow a}f(x),\qquad f(b):=\lim_{x\uparrow b}f(x)
+        \]
+        exist in $\mathbb{K}$, and
+        \[
+            \int f'=f(b)-f(a)
+        \]
+    \end{thm}
+    \begin{proof}
+        Choose $M<\infty$ such that $|f'(x)|\leqslant M$ for
+        every $x\in \,\,]a,b[$. Then by finite increment lemma, $|f(y)-f(x)|\leqslant M|y-x|$ for all $x,y\in\,\,]a,b[$. By completeness of $\mathbb{K}$ and Cauchy's criterion, the endpoint limits $f(a),f(b)$ exist in $\mathbb{K}$. Define extensions to $\mathbb{R}$ by
+        \[
+            \overline{f}(x):=
+            \begin{cases}
+                f(a),&x\leqslant a,\\
+                f(x),&a< x< b,\\
+                f(b),&x\geqslant b,
+            \end{cases}
+            \qquad
+            \overline{f'}(x):=
+            \begin{cases}
+                f'(x),&a<x<b\\
+                0,&x\notin \,\,]a,b[
+            \end{cases}
+        \]
+        Then $\overline f$ is $M$-Lipschitz on $\mathbb{R}$ and $\overline f'(x)=\overline{f'}(x)$ for $x\in \mathbb{R}\setminus\{a,b\}$.
+    
+        For $n\geqslant1$, define the continuous function
+        \[
+            g_n(x):=
+            n\left(\overline f\left(x+\frac1n\right)
+            -\overline f(x)\right),
+            \qquad x\in\mathbb{R}.
+        \]
+        Then, for $x\in\mathbb{R}\setminus\{a,b\}$,
+        \[
+            g_n(x)\to\overline{f'}(x)\qquad \text{as }n\to\infty
+        \]
+        Thus $\overline{f'}$ is measurable. Moreover, the Lipschitz
+        bound gives $|g_n(x)|\leqslant M$ for every $x\in\mathbb{R}$.
+        Since $]a,b[$ has finite measure, by dominated convergence theorem, $g_n\mathbbm{1}_{]a,b[},\overline{f'}\mathbbm{1}_{]a,b[}\in L^1$ and
+        \[
+            \int f'
+            =\int_a^b\overline{f'}
+            =\lim_{n\to\infty}\int_a^b g_n
+        \]
+    
+        By translation invariance of Lebesgue measure, and Theorem \ref{antiderivative of a continuous function},
+        \begin{align*}
+            \int_a^b g_n&=n\left(
+                \int_{a+1/n}^{b+1/n}\overline f
+                -\int_a^b\overline f
+            \right)=n\left(\int_b^{b+1/n}\overline f-\int_a^{a+1/n}\overline f\right)\overset{n\to\infty}{\longrightarrow} f(b)-f(a)
+        \end{align*}
+    \end{proof}
+    \begin{thm}\label{fundamental theorem of calculus for increasing function}
+        Let $-\infty\leqslant a<b\leqslant \infty$ and $f:\,\,]a,b[\,\,\rightarrow\mathbb{R}$ an increasing differentiable function.
+        
+        If $f'$ is bounded on every compact subinterval of $]a,b[$, then
+        \[
+            \int f'=f(b)-f(a)
+        \]
+        where $f(a):=\lim_{x\downarrow a}f(x)=\inf f\in [-\infty,\infty[$ and $f(b):=\lim_{x\uparrow b}f(x)=\sup f\in \,\,]\!-\!\infty,\infty]$.
+    \end{thm}
+    \begin{proof}
+        Choose sequences $(a_n),(b_n)$ in $]a,b[$ such that $a_n\downarrow a$, $b_n\uparrow b$, and $a_n<b_n$.
+        Then $]a_n,b_n[\,\,\uparrow\,\, ]a,b[$. By the fundamental theorem of calculus, $\int f'\mathbbm{1}_{]a_n,b_n[}=\int f'|_{]a_n,b_n[}=\int(f|_{]a_n,b_n[})'=f(b_n)-f(a_n)$. Since $f$ is increasing, $f'$ is positive. It then suffices to apply monotone convergence theorem.
+    \end{proof}
+\subsection{Improper integrals}
+    \begin{thm}
+        Let $I\subset\mathbb{R}$ be an open or half-open interval. If $f:I\rightarrow \mathbb{K}$ is $\lambda$-integrable over every compact subinterval of $I$, then $f$ is $\lambda$-integrable if and only if for some $[a_n,b_n]\uparrow I$
+        \[
+            \lim_{n\to\infty}\int_{a_n}^{b_n} |f|\odif\lambda <\infty
+        \]
+        in which case,
+        \[
+            \int f\odif\lambda=\lim_{n\to\infty}\int_{a_n}^{b_n} f\odif\lambda
+        \]
+    \end{thm}
+    \begin{proof}
+        Since $|f|\cdot \one_{[a_n,b_n]}\uparrow |f|$, by Theorem \ref{Beppo Levi's Theorem}, $\int |f|\odif\lambda=\lim_{n\to\infty}\int |f|\cdot\one_{[a_n,b_n]}\odif\lambda$. Since $|f\cdot \one_{[a_n,b_n]}|\leqslant |f|$ and $f\cdot \one_{[a_n,b_n]}\to f$, if $f$ is $\lambda$-integrable, then by Theorem \ref{dominated convergence theorem}, $\int f\odif\lambda=\lim_{n\to\infty}\int f\cdot \one_{[a_n,b_n]}\odif\lambda$. % Alternatively, $f^+\cdot\one_{[a_n,b_n]}\uparrow f^+$ and $f^-\cdot\one_{[a_n,b_n]}\uparrow f^-$. Thus, $\int f^+\cdot\one_{[a_n,b_n]}\odif\lambda \uparrow \int f^+\odif\lambda$ and $\int f^-\cdot\one_{[a_n,b_n]}\odif\lambda \uparrow \int f^-\odif\lambda$ (note that for an arbitrary sequence $(u_n)$, generally $(u_n^+)$ and $(u_n^-)$ are not increasing), that is, $\int f\odif\lambda=\lim_{n\to\infty}\int f^+\cdot\one_{[a_n,b_n]}\odif\lambda-\lim_{n\to\infty}\int f^-\cdot\one_{[a_n,b_n]}\odif\lambda$.
+    \end{proof}
+\subsection{*Mean Value Theorems}
+    Let $f,g:[a,b]\rightarrow \mathbb{R}$, where $[a,b]\subset\mathbb{R}$.
+    \begin{thm}
+        If $f$ is $\lambda$-integrable, $f\geqslant 0$ and $g$ is continuous, then $f\cdot g$ is $\lambda$-integrable and there exists $\xi\in [a,b]$ such that
+        \[
+            \int _a^b(f\cdot g)\odif\lambda = g(\xi)\int _a^bf\odif\lambda
+        \]
+    \end{thm}
+    \begin{proof}
+        $g([a,b])$ is connected and compact, thus a closed interval $[c,d]$. In particular, $|f\cdot g|\leqslant d\cdot |f|$ is integrable. Since $f\geqslant 0$, if $\int _a^bf\odif\lambda=0$, then $f$ and $f\cdot g$ vanish $\lambda$-a.e.; otherwise, $\int _a^b(f\cdot g)\odif\lambda/\int _a^bf\odif\lambda \in [c, d]=g([a,b])$.
+    \end{proof}
+    \begin{thm}\label{Bonnet's second mean value theorem}
+        If $f$ is $\lambda$-integrable and $g$ is monotone, then $f\cdot g$ is $\lambda$-integrable and there exists $\xi\in[a,b]$ such that
+        \[
+            \int _a^b(f\cdot g)\odif\lambda = g(a)\int _a^\xi f\odif\lambda+g(b)\int_\xi^b f\odif\lambda
+        \]
+    \end{thm}
+    \begin{proof}
+        
+    \end{proof}
+    \begin{crl}
+        If $f$ is $\lambda$-integrable, $g$ is decreasing and $g\geqslant 0$, then $f\cdot g$ is $\lambda$-integrable and there exists $\xi\in[a,b]$ such that
+        \[
+            \int _a^b(f\cdot g)\odif\lambda = g(a)\int _a^\xi f\odif\lambda
+        \]
+    \end{crl}
+    \begin{proof}
+        Apply Theorem \ref{Bonnet's second mean value theorem} to $\tilde{g}=g\cdot\one_{[a,b[}$.
+    \end{proof}
+\subsection{*Eulerian Integrals}
+    Let $f_\alpha:(0,\infty)\rightarrow \mathbb{R},\,\,x\mapsto x^\alpha,\,\,\alpha\in\mathbb{R}$.
+    \begin{enumerate}
+        \item $\exp\circ\alpha\ln|_{(0,1)}\in\mathcal{L}^1_\mathbb{R}((0,1))\Longleftrightarrow \alpha>-1$.
+        \item $\exp\circ\alpha\ln|_{[1,\infty)}\in\mathcal{L}^1_\mathbb{R}([1,\infty))\Longleftrightarrow \alpha<-1$.
+    \end{enumerate}
+    \par Let $f:(0,\infty)\rightarrow\mathbb{R},\,x\mapsto x^{\alpha}e^{-\beta x}$. Then $f\in\mathcal{L}^1((0,\infty);\mathbb{R})$ if $\alpha>-1$ and $\beta>0$.
+    \begin{proof}
+        Using the exponential series we find for all $N\in\mathbb{N}$ and $x>0$
+        \[f(x)=x^{\alpha}e^{-\beta x}\leqslant x^\alpha\mathbbm{1}_{(0,1)}(x)+\frac{N!}{\beta^N}x^{\alpha-N}\mathbbm{1}_{[1,\infty)}(x)\]
+        $\in\mathcal{L}^1((0,\infty);\mathbb{R})$ for large enough $N$.
+    \end{proof}
+    \[B(\alpha,\beta):=\int_{(0,1)}x^{\alpha -1}(1-x)^{\beta -1}\lambda^1(\odif x),\quad\Gamma(t):=\int_{(0,\infty)} x^{t-1}e^{-x}\lambda^1(\odif x)\]
+    \begin{enumerate}
+        \item $\Gamma$ is well-defined for all $t>0$.
+        \item $\Gamma$ is continuous.
+        \item $\Gamma$ is infinitely differentiable.
+        \item $t\Gamma(t)=\Gamma(t+1)$, in particular, $\Gamma(n+1)=n!$.
+    \end{enumerate}
+    \begin{thm}
+        The Beta function:
+        \begin{enumerate}
+        \item $B(\alpha,\beta)$ is defined for $\alpha>0,\,\,\beta>0.$
+        \item $B(\alpha,\beta)=B(\beta,\alpha).$
+        \item $\displaystyle B(\alpha,\beta)=\frac{\alpha -1}{\alpha+\beta -1}B(\alpha -1,\beta)=
+        \frac{\beta -1}{\alpha+\beta -1}B(\alpha,\beta -1).$
+        \item $\displaystyle B(\alpha, n)=\frac{(n-1)!}{\alpha(\alpha +1)\cdots (\alpha +n-1)};\,\,\,\,
+        \displaystyle B(m, n)=\frac{(m-1)!(n-1)!}{(m +n-1)!}.$
+        \item $\displaystyle B(\alpha,\beta)=\int_{(0,\infty)}\frac{y^{\alpha -1}}{(1+y)^{\alpha+\beta}}\lambda^1(\odif y).$
+    \end{enumerate}
+    \end{thm}
+    \begin{thm}
+        The Gamma function:
+        \begin{enumerate}
+        \item $\Gamma(t)$ is defined for $t>0.$
+        \item $\Gamma(t)$ is infinitely differentiable and
+        \[
+            \Gamma^{(n)}(t)=\int_{(0,\infty)}\ln^nx\cdot x^{t-1} e^{-x}\lambda^1(\odif x)
+        \]
+        \item $\Gamma(t+1)=t\Gamma(t);\,\,\,\,(\Gamma(1)=1)\Longrightarrow(\Gamma(n+1)=n!).$ 
+        \item $\ln\circ\Gamma$ is convex.
+        \item $\displaystyle \Gamma(t)=\lim_{n\to\infty}n^t\cdot\frac{(n-1)!}{t(t+1)\cdots(t+n-1)}.$
+        \item $\displaystyle \Gamma(t)\cdot\Gamma(1-t)=\frac{\pi}{\sin{\pi t}}\,\,\,\,(0<t<1).$
+        \item $\displaystyle 2\int_{(0,\infty)}e^{-u^2}\lambda^1(\odif u)=\Gamma(\frac{1}{2})=\sqrt{\pi}.$
+        \item $\displaystyle B(\alpha,\beta)=\frac{\Gamma(\alpha)\cdot\Gamma(\beta)}{\Gamma(\alpha+\beta)}.$
+    \end{enumerate}
+    \end{thm}
+    \begin{enumerate}
+        \item $\displaystyle
+        \int_{0}^{\pi/2}\sin^{\alpha-1}\varphi\cos^{\beta-1}\varphi\odif{\varphi}=\frac{1}{2}B(\frac{\alpha}{2},\frac{\beta}{2});$
+        \item $\displaystyle
+        \int_{0}^{\pi/2}\sin^{\alpha-1}\varphi\odif{\varphi}=\int_{0}^{\pi/2}\cos^{\alpha-1}\varphi\odif{\varphi}=
+        \frac{\sqrt{\pi}}{2}\frac{\Gamma(\frac{\alpha}{2})}{\Gamma(\frac{\alpha+1}{2})};$
+        \item $\displaystyle
+        V_n(r)=\frac{\pi^{n/2}}{\Gamma(\frac{n+2}{2})}r^n,$ where $V_n(r)$ is the volume of an $n$-dimensional ball of radius $r$.
+    \end{enumerate}
 \section{Expectation}
     \begin{define}
         The \textit{expectation} of a random variable $X:(\Omega,\mathscr{H})\rightarrow\er$ is its $\mathbb{P}$-integral.
@@ -3199,237 +3138,6 @@ Let $\alpha\in\mathbb{R}$. $]0,\infty[\,\,\rightarrow \,\,]0,\infty[ \,,\,\,x\ma
             \Var(X_1+\cdots+X_n)=\Var X_1+\cdots+\Var X_n
         \]
     \end{thm}
-\section{Independence}
-    \begin{thm}
-        If $X,Y$ are independent, then they are orthogonal, i.e., $\Cov (X,Y)=0$, i.e., $\mathbb{E}(XY)=\mathbb{E}X\cdot\mathbb{E}Y$.
-    \end{thm}
-\section{Convergence theorems}
-\subsection{Dominated convergence}
-    \begin{thm}\label{dominated convergence theorem}
-        Let $(u_n)\in\cat{Mes}(X,\mathbb{K})^\mathbb{N}$. If
-        \begin{tight_enumerate}
-            \item there exists $w\in\mathfrak{L}_\mathbb{R}^1(\mu)$ such that $|u_n|\leqslant w\,\,\mu$-a.e. for all $n\in\mathbb{N}$,
-            \item there exists $u\in\cat{Mes}(X,\mathbb{K})$ such that $u_n\to u$ $\mu$-a.e.,
-        \end{tight_enumerate}
-        then $u_n\in\mathfrak{L}^1_\mathbb{K}(\mu)$ for all $n\in\mathbb{N}$, $u\in\mathfrak{L}^1_\mathbb{K}(\mu)$, and the following holds:
-        \begin{gather*}
-            \lim_{n\to\infty}\int |u_n-u|\odif\mu=0 \\
-            \lim_{n\to\infty}\int u_n\odif\mu=\int u\odif\mu
-        \end{gather*}
-    \end{thm}
-    % Remark. The theorem still holds for $\mathbb{K}=\er$ by using the usual identification of integrable $\er$-valued functions with integrable $\mathbb{R}$-valued functions, since $N=\{|w|=\infty\}\cup \{|u|=\infty\} \cup \bigcup{n=1}^\infty\{|u_n|=\infty\}$ has to be $\mu$-null (as a consequence of the existence of a $\mu$-integrable positive function $w\in\mathfrak{L}^1_{\er})$.
-    \begin{proof}
-        Since a countable union of $\mu$-null sets is $\mu$-null, there exists $N\in\mathscr{N}_\mu$ such that $|u_n\one_{N^c}|\leqslant w \one_{N^c}\leqslant w$ for all $n\in\mathbb{N}$ and $(u_n\one_{N^c})\to u\one_{N^c}$. Thus, $u_n\one_{N^c}$ and hence $u_n$ are integrable. Since $|\sph|:\mathbb{K}\rightarrow\mathbb{R}$ is continuous, $|u\one_{N^c}|=\lim_{n\to\infty}|u_n\one_{N^c}|\leqslant w$. Thus, $u\one_{N^c}$ and hence $u$ are integrable. Since $|u_n-u|\one_{N^c}\leqslant 2w$ for all $n\in\mathbb{N}$, applying Fatou's theorem to the sequence $(2w-|u_n-u|\one_{N^c})\in\mathfrak{L}^1_{\mathbb{R}_+}(\mu)^\mathbb{N}$ yields $\int 2w\odif \mu\leqslant \varliminf_{n\to\infty} \int (2w-|u_n-u|\one_{N^c})\odif \mu=\int 2w\odif \mu- \varlimsup_{n\to\infty} \int |u_n-u|\one_{N^c}\odif \mu$. So $0\leqslant \varliminf_{n\to\infty} \int |u_n-u|\one_{N^c}\odif \mu\leqslant \varlimsup_{n\to\infty} \int |u_n-u|\one_{N^c}\odif \mu=0$. Theorem \ref{triangle inequality 1}.
-    \end{proof}
-    % \begin{remark}
-    %     If $(u_n(x))$ converges in $\mathbb{K}$ for $\mu$-almost all $x\in X$, then there exists $N\in\mathscr{N}_\mu$ such that $u=\lim_{n\to\infty}u_n\one_{N^c}$ is a function $X\rightarrow \mathbb{K}$. Since $\cat{Mes}(X,\mathbb{K})$ is sequentially closed, $u$ is a measurable function such that $u_n\to u$ $\mu$-a.e..
-    % \end{remark}
-    Alternative presentation: \textbf{Actually not good since that the limit is taken in the topology of pointwise convergence is not obvious:}
-    \begin{thm}
-        Let $(u_n)\in\cat{Mes}(X,\mathbb{K})^\mathbb{N}$. If
-        \begin{tight_enumerate}
-            \item there exists a $\mu$-integrable $w\in L^1_\mathbb{R}(\mu)$ such that $|u_n|\leqslant w\,\,\mu$-a.e. for all $n\in\mathbb{N}$,
-            \item $(u_n)$ converges $\mu$-a.e.,
-        \end{tight_enumerate}
-        then $u_n\in L^1_\mathbb{K}(\mu)$ for all $n\in\mathbb{N}$, $\lim_{n\to\infty} u_n\in {L}^1_\mathbb{K}(\mu)$, and the following holds:
-        \begin{gather*}
-            \lim_{n\to\infty}\int \left|u_n-\lim_{n\to\infty} u_n\right|\odif\mu=0 \\
-            \lim_{n\to\infty}\int u_n\odif\mu=\int \lim_{n\to\infty} u_n\odif\mu
-        \end{gather*}
-    \end{thm}
-    \begin{crl}
-        Let $u:X\rightarrow \mathbb{K}$ be $\mu$-integrable over $A\in\Sigma X$. If
-        \[
-            A=\bigcup_{n=1}^\infty A_n
-        \]
-        for $(A_n)\in\Sigma X^\mathbb{N}$ with $A_i\cap A_j\in\mathscr{N}_\mu$ for all $i,j\in\mathbb{N}$ distinct, then
-        \[
-            \int _Au\odif \mu=\sum_{n=1}^\infty\int_{A_n}u\odif\mu
-        \]
-    \end{crl}
-    \begin{proof}
-        
-    \end{proof}
-\subsection{Parameter-dependent integrals}
-    \begin{thm}\label{continuity of parameter-dependent integral}
-        Let $T$ be a first-countable space and $f:T\times X\rightarrow \mathbb{K}$ a function. Let $t_0\in T$. If
-        \begin{tight_enumerate}
-            \item $f(t,\ph)\in L^1_{\mathbb{K}}$ for all $t\in T$.
-            \item $f(\ph,x):T\rightarrow \mathbb{K}$ is continuous at $t_0$ for $\mu$-almost all $x\in X$.
-            \item there exists a neighborhood $U$ of $t_0$ and a $\mu$-integrable function $g\in L^1_\mathbb{R}$ such that $|f(t,x)|\leqslant g(x)$ for all $t\in U$ and $\mu$-almost all $x\in X$.
-        \end{tight_enumerate}
-        then the function
-        \[
-            F:T\rightarrow \mathbb{K},\,\,t\mapsto \int f(t,\bullet )\odif \mu
-        \]
-        is continuous at $t_0$, and also the function
-        \[
-            \Phi:T\rightarrow \mathfrak{L}^1_{\mathbb{K}},\,\,t\mapsto f(t,\bullet)
-        \]
-        is continuous at $t_0$.
-    \end{thm}
-    \begin{proof}
-        Let $(t_n)$ be a sequence in $U$ tending to $t_0$, so $|f(t_n,\bullet)|\leqslant g$ $\mu$-a.e.. Since $f(\bullet,x)$ is continuous at $t_0$ for almost all $x\in X$, $f(t_n,\bullet)\to f(t_0,\bullet)$ $\mu$-a.e.. By dominated convergence, $F(t_n)\to F(t_0)$. By first-countability (hereditary) of $U$, $F(t)$ is continuous at $t_0$ in $U$, and hence in $T$.
-    \end{proof}
-    \begin{thm}\label{differentiability of parameter-dependent integral}
-        Let $]a,b[\,\,\subset\mathbb{R}$ and $f:\,\,]a,b[\,\,\times X\rightarrow\mathbb{R}$ a function. Let $t_0\in\,\,]a,b[$. If
-        \begin{tight_enumerate}
-            \item $f(t,\bullet)\in L^1_\mathbb{R}$ for all $t\in \,\,]a,b[$,
-            \item the partial derivative $\displaystyle \pdv{f}{t}$ exists at $(t_0,x)$ for all $x\in X$,
-            \item there exist a neighborhood $U$ of $t_0$ and $g\in L^1_\mathbb{R}$ such that for all $t\in U\setminus\{t_0\}$ and $\mu$-a.a. $x\in X$
-            \[
-                \left|\frac{f(t,x)-f(t_0,x)}{t-t_0}\right|\leqslant g(x)
-            \]
-        \end{tight_enumerate}
-        then the function
-        \[F:\,\,]a,b[\,\,\rightarrow \mathbb{R},\,\,t\mapsto \int f(t,\bullet)\odif\mu\]
-        is differentiable at $t_0$, the function $\displaystyle \pdv{f}{t}(t_0,\bullet)\in L^1_\mathbb{R}$ and
-        \[
-            F'(t_0)=\odv{}{t}_{t_0}\int f(t,\bullet)\odif\mu=\int \pdv{f}{t}(t_0,\bullet)\odif\mu
-        \]
-    \end{thm}
-    \begin{proof}
-        Let $(t_n)$ be a sequence in $U\setminus \{t_0\}$ tending to $t_0$, so $u_n=(f(t_n,\bullet)-f(t_0,\bullet))/(t_n-t_0)\leqslant g$ $\mu$-a.e.. Since the partial derivative exists at $(t_0,x)$ for all $x$, $u_n\to\pdv{f}{t}(t_0,\bullet)$ (pointwise).
-    \end{proof}
-\subsection{**Holomorphic Dependence of the Integral on a Complex Parameter}
-\subsection{**Scheff\'{e}'s Lemma}
-    $||a|-|b||\leqslant |a-b|$.
-\section{Integral calculus}
-    This section concerns functions $f:X\rightarrow \mathbb{K}$ with $X\in \mathscr{L}^p$, and $X$ is equipped with the trace $\sigma$-algebra $\mathscr{L}^p|_X$. As usual, the codomain is equipped with the Borel $\sigma$-algebra $\mathscr{B}\mathbb{K}$.
-\subsection{The Lebesgue measure}
-    \begin{thm}
-        For $X\in \mathscr{L}^p$,
-        \[
-            \mathscr{L}^p|_X=\{A\in \mathscr{L}^p\,|\,A\subset X\}
-        \]
-    \end{thm}
-    \begin{thm}
-        $\cat{Mes}(X,\mathbb{K})$ is a $\mathbb{K}$-algebra. $f\in \cat{Mes}(X,\mathbb{K})\Longrightarrow |f|\in \cat{Mes}(X,\mathbb{K})$. $\cat{Mes}(X,\mathbb{R})$ is a lattice. 
-    \end{thm}
-    \begin{thm}
-        If $f:X\rightarrow \mathbb{K}$ is continuous, then $f\in\cat{Mes}((X,\mathscr{B}^p|_X),\mathbb{K})\subset\cat{Mes}((X,\mathscr{L}^p|_X),\mathbb{K})$.
-    \end{thm}
-    \begin{proof}
-        A continuous map is $\mathscr{B}A/\mathscr{B}\mathbb{K}$-measurable, i.e., $\mathscr{B}^p|_A/\mathscr{B}\mathbb{K}$-measurable, but $\mathscr{B}^p|_A\subset \mathscr{L}^p|_A$.
-    \end{proof}
-    \begin{thm}
-        If $f:I\rightarrow \mathbb{R}$ is monotone, where $I\subset \mathbb{R}$ is an interval, then $f\in\cat{Mes}(I,\mathbb{K})$.
-    \end{thm}
-    \begin{proof}
-        $f^{-1}([y,\infty[)$ is a subinterval of $I$. Recall Theorem \ref{measurable functions}.
-    \end{proof}
-    \begin{define}
-        Let $X\in\mathscr{L}^p$. A function $f:X\rightarrow\mathbb{K}$ is \textit{integrable} if it is $\lambda^p|_{\mathscr{L}^p|_X}$-integrable.
-    \end{define}
-\subsection{*The Fundamental Theorem of Calculus}
-    \begin{thm}
-        If $f:[a,b]\rightarrow\mathbb{K}$ is differentiable and $f'$ is bounded, then $f'$ is integrable and
-        \[
-            \int _a^b f'\odif\lambda=f(b)-f(a)   
-        \]
-    \end{thm}
-    \begin{proof}
-        
-    \end{proof}
-\subsection{Improper Integrals}
-    \begin{thm}
-        Let $I\subset\mathbb{R}$ be an open or half-open interval. If $f:I\rightarrow \mathbb{K}$ is $\lambda$-integrable over every compact subinterval of $I$, then $f$ is $\lambda$-integrable if and only if for some $[a_n,b_n]\uparrow I$
-        \[
-            \lim_{n\to\infty}\int_{a_n}^{b_n} |f|\odif\lambda <\infty
-        \]
-        in which case,
-        \[
-            \int f\odif\lambda=\lim_{n\to\infty}\int_{a_n}^{b_n} f\odif\lambda
-        \]
-    \end{thm}
-    \begin{proof}
-        Since $|f|\cdot \one_{[a_n,b_n]}\uparrow |f|$, by Theorem \ref{Beppo Levi's Theorem}, $\int |f|\odif\lambda=\lim_{n\to\infty}\int |f|\cdot\one_{[a_n,b_n]}\odif\lambda$. Since $|f\cdot \one_{[a_n,b_n]}|\leqslant |f|$ and $f\cdot \one_{[a_n,b_n]}\to f$, if $f$ is $\lambda$-integrable, then by Theorem \ref{dominated convergence theorem}, $\int f\odif\lambda=\lim_{n\to\infty}\int f\cdot \one_{[a_n,b_n]}\odif\lambda$. % Alternatively, $f^+\cdot\one_{[a_n,b_n]}\uparrow f^+$ and $f^-\cdot\one_{[a_n,b_n]}\uparrow f^-$. Thus, $\int f^+\cdot\one_{[a_n,b_n]}\odif\lambda \uparrow \int f^+\odif\lambda$ and $\int f^-\cdot\one_{[a_n,b_n]}\odif\lambda \uparrow \int f^-\odif\lambda$ (note that for an arbitrary sequence $(u_n)$, generally $(u_n^+)$ and $(u_n^-)$ are not increasing), that is, $\int f\odif\lambda=\lim_{n\to\infty}\int f^+\cdot\one_{[a_n,b_n]}\odif\lambda-\lim_{n\to\infty}\int f^-\cdot\one_{[a_n,b_n]}\odif\lambda$.
-    \end{proof}
-\subsection{*Mean Value Theorems}
-    Let $f,g:[a,b]\rightarrow \mathbb{R}$, where $[a,b]\subset\mathbb{R}$.
-    \begin{thm}
-        If $f$ is $\lambda$-integrable, $f\geqslant 0$ and $g$ is continuous, then $f\cdot g$ is $\lambda$-integrable and there exists $\xi\in [a,b]$ such that
-        \[
-            \int _a^b(f\cdot g)\odif\lambda = g(\xi)\int _a^bf\odif\lambda
-        \]
-    \end{thm}
-    \begin{proof}
-        $g([a,b])$ is connected and compact, thus a closed interval $[c,d]$. In particular, $|f\cdot g|\leqslant d\cdot |f|$ is integrable. Since $f\geqslant 0$, if $\int _a^bf\odif\lambda=0$, then $f$ and $f\cdot g$ vanish $\lambda$-a.e.; otherwise, $\int _a^b(f\cdot g)\odif\lambda/\int _a^bf\odif\lambda \in [c, d]=g([a,b])$.
-    \end{proof}
-    \begin{thm}\label{Bonnet's second mean value theorem}
-        If $f$ is $\lambda$-integrable and $g$ is monotone, then $f\cdot g$ is $\lambda$-integrable and there exists $\xi\in[a,b]$ such that
-        \[
-            \int _a^b(f\cdot g)\odif\lambda = g(a)\int _a^\xi f\odif\lambda+g(b)\int_\xi^b f\odif\lambda
-        \]
-    \end{thm}
-    \begin{proof}
-        
-    \end{proof}
-    \begin{crl}
-        If $f$ is $\lambda$-integrable, $g$ is decreasing and $g\geqslant 0$, then $f\cdot g$ is $\lambda$-integrable and there exists $\xi\in[a,b]$ such that
-        \[
-            \int _a^b(f\cdot g)\odif\lambda = g(a)\int _a^\xi f\odif\lambda
-        \]
-    \end{crl}
-    \begin{proof}
-        Apply Theorem \ref{Bonnet's second mean value theorem} to $\tilde{g}=g\cdot\one_{[a,b[}$.
-    \end{proof}
-\subsection{*Eulerian Integrals}
-    Let $f_\alpha:(0,\infty)\rightarrow \mathbb{R},\,\,x\mapsto x^\alpha,\,\,\alpha\in\mathbb{R}$.
-    \begin{enumerate}
-        \item $\exp\circ\alpha\ln|_{(0,1)}\in\mathcal{L}^1_\mathbb{R}((0,1))\Longleftrightarrow \alpha>-1$.
-        \item $\exp\circ\alpha\ln|_{[1,\infty)}\in\mathcal{L}^1_\mathbb{R}([1,\infty))\Longleftrightarrow \alpha<-1$.
-    \end{enumerate}
-    \par Let $f:(0,\infty)\rightarrow\mathbb{R},\,x\mapsto x^{\alpha}e^{-\beta x}$. Then $f\in\mathcal{L}^1((0,\infty);\mathbb{R})$ if $\alpha>-1$ and $\beta>0$.
-    \begin{proof}
-        Using the exponential series we find for all $N\in\mathbb{N}$ and $x>0$
-        \[f(x)=x^{\alpha}e^{-\beta x}\leqslant x^\alpha\mathbbm{1}_{(0,1)}(x)+\frac{N!}{\beta^N}x^{\alpha-N}\mathbbm{1}_{[1,\infty)}(x)\]
-        $\in\mathcal{L}^1((0,\infty);\mathbb{R})$ for large enough $N$.
-    \end{proof}
-    \[B(\alpha,\beta):=\int_{(0,1)}x^{\alpha -1}(1-x)^{\beta -1}\lambda^1(\odif x),\quad\Gamma(t):=\int_{(0,\infty)} x^{t-1}e^{-x}\lambda^1(\odif x)\]
-    \begin{enumerate}
-        \item $\Gamma$ is well-defined for all $t>0$.
-        \item $\Gamma$ is continuous.
-        \item $\Gamma$ is infinitely differentiable.
-        \item $t\Gamma(t)=\Gamma(t+1)$, in particular, $\Gamma(n+1)=n!$.
-    \end{enumerate}
-    \begin{thm}
-        The Beta function:
-        \begin{enumerate}
-        \item $B(\alpha,\beta)$ is defined for $\alpha>0,\,\,\beta>0.$
-        \item $B(\alpha,\beta)=B(\beta,\alpha).$
-        \item $\displaystyle B(\alpha,\beta)=\frac{\alpha -1}{\alpha+\beta -1}B(\alpha -1,\beta)=
-        \frac{\beta -1}{\alpha+\beta -1}B(\alpha,\beta -1).$
-        \item $\displaystyle B(\alpha, n)=\frac{(n-1)!}{\alpha(\alpha +1)\cdots (\alpha +n-1)};\,\,\,\,
-        \displaystyle B(m, n)=\frac{(m-1)!(n-1)!}{(m +n-1)!}.$
-        \item $\displaystyle B(\alpha,\beta)=\int_{(0,\infty)}\frac{y^{\alpha -1}}{(1+y)^{\alpha+\beta}}\lambda^1(\odif y).$
-    \end{enumerate}
-    \end{thm}
-    \begin{thm}
-        The Gamma function:
-        \begin{enumerate}
-        \item $\Gamma(t)$ is defined for $t>0.$
-        \item $\Gamma(t)$ is infinitely differentiable and
-        \[
-            \Gamma^{(n)}(t)=\int_{(0,\infty)}\ln^nx\cdot x^{t-1} e^{-x}\lambda^1(\odif x)
-        \]
-        \item $\Gamma(t+1)=t\Gamma(t);\,\,\,\,(\Gamma(1)=1)\Longrightarrow(\Gamma(n+1)=n!).$ 
-        \item $\ln\circ\Gamma$ is convex.
-        \item $\displaystyle \Gamma(t)=\lim_{n\to\infty}n^t\cdot\frac{(n-1)!}{t(t+1)\cdots(t+n-1)}.$
-        \item $\displaystyle \Gamma(t)\cdot\Gamma(1-t)=\frac{\pi}{\sin{\pi t}}\,\,\,\,(0<t<1).$
-        \item $\displaystyle 2\int_{(0,\infty)}e^{-u^2}\lambda^1(\odif u)=\Gamma(\frac{1}{2})=\sqrt{\pi}.$
-        \item $\displaystyle B(\alpha,\beta)=\frac{\Gamma(\alpha)\cdot\Gamma(\beta)}{\Gamma(\alpha+\beta)}.$
-    \end{enumerate}
-    \end{thm}
-    \begin{enumerate}
-        \item $\displaystyle
-        \int_{0}^{\pi/2}\sin^{\alpha-1}\varphi\cos^{\beta-1}\varphi\odif{\varphi}=\frac{1}{2}B(\frac{\alpha}{2},\frac{\beta}{2});$
-        \item $\displaystyle
-        \int_{0}^{\pi/2}\sin^{\alpha-1}\varphi\odif{\varphi}=\int_{0}^{\pi/2}\cos^{\alpha-1}\varphi\odif{\varphi}=
-        \frac{\sqrt{\pi}}{2}\frac{\Gamma(\frac{\alpha}{2})}{\Gamma(\frac{\alpha+1}{2})};$
-        \item $\displaystyle
-        V_n(r)=\frac{\pi^{n/2}}{\Gamma(\frac{n+2}{2})}r^n,$ where $V_n(r)$ is the volume of an $n$-dimensional ball of radius $r$.
-    \end{enumerate}
 \section{Density Function of a Measure}
     \begin{thm}
         Let $f\in \mathcal{M}(\mathscr{A};\overline{\mathbb{R}}_+)$. The set function
@@ -3471,7 +3179,405 @@ Let $\alpha\in\mathbb{R}$. $]0,\infty[\,\,\rightarrow \,\,]0,\infty[ \,,\,\,x\ma
     \begin{thm}
         If $\mu,\nu$ are $\sigma$-finite, then there exists a unique (up to null sets) decomposition \[\nu=\nu^\ll+\nu^\perp\]where $\nu^\ll\ll\mu$ and $\nu^\perp\perp\mu$.
     \end{thm}
+\chapter{Transition Kernels and Fubini-Tonelli Theorem}
+\section{Transition kernels}
+    \begin{define}
+        A \textit{transition kernel} from $E$ to $F$ is a function $\kappa:E\times\mathscr{F}\rightarrow [0,\infty]$ such that
+        \begin{tight_enumerate}
+            \item $\kappa(\ph,B):E\rightarrow [0,\infty]$ is measurable for all $B\in\mathscr{F}$.
+            \item $\kappa(x,\ph):\mathscr{F}\rightarrow [0,\infty]$ is a measure for all $x\in E$.
+        \end{tight_enumerate}
+    \end{define}
+    \begin{thm}
+        For $\nu:\mathscr{F}\rightarrow [0,\infty]$ a measure and $u:E\rightarrow \er_+$ measurable,
+        \[
+            \kappa:E\times\mathscr{F}\rightarrow [0,\infty],\,\,(x,B)\mapsto u(x)\cdot \nu(B)
+        \]
+        is a transition kernel from $E$ to $F$.
+    \end{thm}
+    \begin{thm}
+        If $(\kappa_n)_{n\in\mathbb{N}}$ is a sequence of transition kernels from $(E,\mathscr{E})$ to $(F,\mathscr{F})$, then
+        \[
+            \sum_{n=1}^\infty \kappa_n
+        \]
+        is also a transition kernel from $(E,\mathscr{E})$ to $(F,\mathscr{F})$.
+    \end{thm}
+    \begin{thm}
+        Let $\kappa:E\times\mathscr{F}\rightarrow [0,\infty]$ be a transition kernel from $E$ to $F$. Then
+        \begin{tight_enumerate}
+            \item for every $u\in\overline{\mathscr{F}}_+$,
+            \[
+                \bracket{\kappa}{u}:E\rightarrow \er_+,\,\,x\mapsto \int_{\kappa(x,\ph)}u
+            \]
+            is measurable, i.e., in $\overline{\mathscr{E}}_+$.
+            \item for every measure $\mu$ on $(E,\mathscr{E})$,
+            \[
+                \bracket{\mu}{\kappa}:\mathscr{F}\rightarrow [0,\infty],\,\,B\mapsto \int_\mu \kappa(\ph,B)
+            \]
+            is a measure on $(F,\mathscr{F})$.
+            \item for every $u\in \overline{\mathscr{F}}_+$ and every measure $\mu$ on $(E,\mathscr{E})$,
+            \begin{equation}\label{eq:associativity_of_kernel_operators}
+                \int_{\bracket{\mu}{\kappa}}u=\int_{\mu}\bracket{\kappa}{u}=\int_{\mu}\int_{\kappa(x,\ph)}u\odif y\odif x
+            \end{equation}
+        \end{tight_enumerate}
+    \end{thm}
+    Let $u\in \mathscr{E}/\mathscr{F}$ and $\kappa(x,B):=\mathbbm{1}_{\{u\in B\}}$. Then \eqref{eq:associativity_of_kernel_operators} states the general transformation theorem under pushforward of measures.
+\subsection{Characterization}
+    \begin{thm}
+        A \textit{transition kernel} from $(E,\mathscr{E})$ to $(F,\mathscr{F})$ is equivalently an operator $\kappa:\overline{\mathscr{F}}_+\rightarrow \overline{\mathscr{E}}_+$ satisfying
+        \begin{tight_enumerate}
+            \item $\kappa(0)=0$,
+            \item $\kappa(\alpha u+\beta v)=\alpha \kappa(u)+ \beta \kappa(v)$ for all $u,v\in \overline{\mathscr{F}}_+$ and $\alpha,\beta\in\mathbb{R}_+$,
+            \item $\kappa(u_n)\uparrow\kappa(u)$ whenever $u_n\uparrow u$ in $\overline{\mathscr{F}}_+$.
+        \end{tight_enumerate}
+    \end{thm}
+    \begin{proof}
+        Indeed, $\kappa(x,B)=\kappa(\mathbbm{1}_B)(x)$.
+    \end{proof}
+    \begin{thm}
+        \[
+            (\kappa_1\circ\kappa_2)(x,C)=\kappa_1(\kappa_2(\mathbbm{1}_C))(x)=\int_{\kappa_1(x,\ph)}\kappa_2(\mathbbm{1}_C)=\int_{\kappa_1(x,\odif y)}\kappa_2(y,C)
+        \]
+    \end{thm}
+\subsection{Classification}
+    \begin{define}
+        A transition kernel $\kappa:\overline{\mathscr{F}}_+\rightarrow \overline{\mathscr{E}}_+$ from $(E,\mathscr{E})$ to $(F,\mathscr{F})$ is called 
+        \begin{tight_enumerate}
+            \item a \textit{Markov kernel} if $\kappa(1)=1$.
+            \item a \textit{sub-Markov kernel} if $\kappa(1)\leqslant 1$.
+            \item a \textit{finite kernel} if $\kappa(1)(x)<\infty$ for all $x\in E$.
+            \item a \textit{bounded kernel} if $\kappa(1)$ is bounded.
+            \item a \textit{$\sigma$-finite kernel} if $\kappa(x,\ph)$ is a $\sigma$-finite measure for all $x\in E$.
+            \item a \textit{$\sigma$-bounded kernel} if there exists a countable measurable partition $F=F_1\sqcup F_2\sqcup \cdot$ such that $\kappa(\mathbbm{1}_{F_n})$ is bounded for all $n\in\mathbb{N}$.
+            \item a \textit{s-finite kernel} if $\kappa=\sum_{n=1}^\infty\kappa_n$ for a sequence $(\kappa_n)$ of finite kernels.
+            \item a \textit{s-bounded kernel} if $\kappa=\sum_{n=1}^\infty\kappa_n$ for a sequence $(\kappa_n)$ of bounded kernels.
+        \end{tight_enumerate}
+    \end{define}
+    \begin{thm}
+        Let $\iota:\overline{\mathscr{E}}_+\rightarrow \overline{\mathscr{E}}_+$ be the identity kernel. Then
+        \[
+            \iota(x,A)=\iota(\mathbbm{1}_A)(x)=\mathbbm{1}_A(x)=\delta_x(A)
+        \]
+    \end{thm}
+    It should be obvious that
+    \begin{thm}
+        If $\kappa:\overline{\mathscr{E}}_+\rightarrow \overline{\mathscr{E}}_+$ is a Markov kernel on $(E,\mathscr{E})$, then so are
+        \[
+            \kappa^0:=\iota,\quad\kappa^1:=\kappa,\quad\kappa^{n+1}=\kappa\circ\kappa^n,\quad n\geqslant 0
+        \]
+    \end{thm}
+    \begin{thm}
+        If $\kappa$ is a finite kernel from $(E,\mathscr{E})$ to $(F,\mathscr{F})$, then
+        \[
+            \hat{\kappa}:(x,B)\mapsto \frac{\kappa(x,B)}{h(x)}
+        \]
+        is a sub-Markov kernel, where
+        \[
+            h:x\mapsto 
+            % \begin{cases}
+            %     \kappa(x,F) &\text{if }\kappa(x,F)>0\\
+            %     1 &\text{otherwise}
+            % \end{cases} =
+            \kappa(x,F)\mathbbm{1}_{\{\kappa(\ph,F)>0\}}+\mathbbm{1}_{\{\kappa(\ph,F)=0\}}
+        \]
+        is measurable and strictly positive.
+    \end{thm}
+\subsection{Extension to measurable functions on the product space}
+    \begin{thm}\label{Extension to measurable functions on the product space}
+        Let $\kappa$ be a s-finite kernel from $(E,\mathscr{E})$ to $(F,\mathscr{F})$. Then for every $u\in \overline{\mathscr{E}\otimes\mathscr{F}}_+$, the function
+        \[
+            \bar{\kappa}(u):E\rightarrow\er_+,\,\,x\mapsto \int_{\kappa(x,\odif y)}u(x,y)
+        \]
+        is in $\overline{\mathscr{E}}_+$. Moreover, the operator $\bar{\kappa}:\overline{\mathscr{E}\otimes\mathscr{F}}_+\rightarrow \overline{\mathscr{E}}_+$ is linear and continuous under increasing limits, in the sense that
+        \begin{tight_enumerate}
+            \item $\bar{\kappa}(\alpha u+\beta v)=\alpha\bar{\kappa}(u)+\beta\bar{\kappa}(v)$,
+            \item $\bar{\kappa}(u_n)\uparrow \bar{\kappa}(u)$ for $u_n\uparrow u$ in $\overline{\mathscr{E}\otimes\mathscr{F}}_+$.
+        \end{tight_enumerate}
+    \end{thm}
+    \begin{proof}
+        Measurability of $y\mapsto u(x,y)$ for any fixed $x$ follows from Theorem \ref{sections are measurable}.
+        By Theorem \ref{integration w.r.t. a series of measures}, it suffices to show for $\kappa$ a finite kernel.
+        For $C\in\mathscr{E}\otimes\mathscr{F}$, write
+        $C_x=\{y\in F:(x,y)\in C\}\in\mathscr{F}=\{\mathbbm{1}_{C}(x,\ph)=1\}$, and define
+        \[
+        \mathscr{D}
+        =\left\{C\in\mathscr{E}\otimes\mathscr{F}:
+        x\mapsto\kappa(x,C_x)\text{ is measurable}\right\}.
+        \]
+        For every measurable rectangle $A\times B$,
+        \[
+        \kappa(x,(A\times B)_x)
+        =\mathbbm{1}_A(x)\kappa(x,B),
+        \]
+        so $\mathscr{D}$ contains all measurable rectangles, including
+        $E\times F$.
+        
+        If $C\in\mathscr{D}$, then
+        \[
+        \kappa(x,(C^c)_x)
+        =\kappa(x,F)-\kappa(x,C_x)
+        \]
+        is measurable, since both terms are finite measurable functions.
+        Thus $C^c\in\mathscr{D}$.
+        If $(C_n)_{n\geqslant1}$ is a sequence of pairwise disjoint
+        members of $\mathscr{D}$, then
+        \[
+        \kappa\left(x,\left(\bigsqcup_{n=1}^{\infty}C_n\right)_x\right)
+        =\sum_{n=1}^{\infty}\kappa(x,(C_n)_x)
+        \]
+        is measurable. Hence $\mathscr{D}$ is a Dynkin system.
+        Since measurable rectangles are $\cap$-stable, Theorem \ref{generators} gives $\mathscr{D}=\mathscr{E}\otimes\mathscr{F}$.
+        
+        Consequently, $\bar{\kappa}(u)$ is measurable when $u$ is
+        an indicator, and hence when $u$ is a positive simple
+        function, and hence for all $u$ positive measurable functions via monotone convergence theorem.
+    \end{proof}
+    The assumption of $s$-finiteness cannot be omitted. Let
+    \[
+        (E,\mathscr{E})=(\mathbb{R},\mathscr{B}(\mathbb{R})),
+        \qquad
+        (F,\mathscr{F})=(\mathbb{R},\mathscr{P}(\mathbb{R})),
+    \]
+    and let $\nu$ be counting measure on $\mathscr{P}(\mathbb{R})$. Define
+    \[
+        \kappa(x,B)=\nu(B),
+        \qquad x\in E,\quad B\in\mathscr{F}.
+    \]
+    Then $\kappa$ is a kernel, since $\kappa(x,\cdot)=\nu$ is a measure
+    for every $x\in E$, and $x\mapsto\kappa(x,B)$ is constant, hence
+    $\mathscr{E}$-measurable, for every $B\in\mathscr{F}$.
     
+    Choose a non-Borel set $A\subseteq\mathbb{R}$ and define
+    \[
+        u(x,y)=\mathbbm{1}_{D}(x,y)\mathbbm{1}_{A}(y),
+        \qquad
+        D=\{(x,y)\in\mathbb{R}^2:x=y\}.
+    \]
+    The diagonal $D$ is closed, so
+    \[
+        D\in\mathscr{B}(\mathbb{R}^2)
+        =\mathscr{B}(\mathbb{R})\otimes\mathscr{B}(\mathbb{R})
+        \subseteq\mathscr{E}\otimes\mathscr{F}.
+    \]
+    Moreover, $\mathbb{R}\times A\in\mathscr{E}\otimes\mathscr{F}$.
+    Thus $u=\mathbbm{1}_{D\cap(\mathbb{R}\times A)}$ belongs to
+    $\overline{\mathscr{E}\otimes\mathscr{F}}_+$. However,
+    \[
+        x\mapsto \int_{\kappa(x,\odif y)}u(x,y)
+        =\int_{\nu(\odif y)}
+            \mathbbm{1}_{\{x\}}(y)\mathbbm{1}_{A}(y)
+        =\mathbbm{1}_{A}(x),
+    \]
+    which is not $\mathscr{E}$-measurable.
+    
+    Finally, $\kappa$ is not $s$-finite. Otherwise, fixing any $x\in E$
+    would express $\nu$ as a countable sum of finite measures. Each
+    finite measure assigns strictly positive mass to at most countably
+    many singletons, so such a sum does as well. This contradicts
+    $\nu(\{y\})=1$ for every $y\in\mathbb{R}$.
+\subsection{Measures on the product space}
+    \begin{thm}\label{measures on the product space}
+        Let $\mu$ be a measure on $(E,\mathscr{E})$, and let $\kappa$
+        be an s-finite transition kernel from $(E,\mathscr{E})$
+        to $(F,\mathscr{F})$. Then there exists a unique measure $\pi$ on the product space
+        $(E\times F,\mathscr{E}\otimes\mathscr{F})$ such that
+        \begin{equation}\label{measure on the product space, integral form}
+        \int_\pi u
+        =\int_{\mu(\odif x)}\int_{\kappa(x,\odif y)}u(x,y)
+        \qquad
+        \forall u\in\overline{\mathscr{E}\otimes\mathscr{F}}_+
+        \end{equation}
+        Moreover, if $\mu$ is $\sigma$-finite and $\kappa$ is
+        $\sigma$-bounded, then $\pi$ is $\sigma$-finite and is
+        the unique measure on that product space satisfying
+        \begin{equation}\label{measure on the product space, set function form}
+        \pi(A\times B)
+        =\int_{\mu(\odif x)}\mathbbm{1}_A(x)\cdot \kappa(x,B)\qquad \forall A\in\mathscr{E}\quad\forall B\in\mathscr{F}
+        \end{equation}
+    \end{thm}
+    \begin{proof}
+        If $u_n$ is an increasing sequence in $\overline{\mathscr{E}\otimes\mathscr{F}}_+$, then $(x\mapsto \int_{\kappa(x,\odif y)}u_n(x,y))_{n\in\mathbb{N}}$ is an increasing sequence of measurable functions by Theorem \ref{Extension to measurable functions on the product space} ($s$-finiteness of the kernel is required here). Thus, repeated application of the monotone convergence theorem shows that \eqref{measure on the product space, integral form} defines a measure on the product space via Theorem \ref{Characterization of measures via integrals}.
+
+        To prove the second, start by observing that $\pi$ satisfies
+        \eqref{measure on the product space, set function form}.
+        Supposing that $\mu$ is $\sigma$-finite and $\kappa$ is $\sigma$-bounded,
+        there remains to show that $\pi$ is $\sigma$-finite and is the only measure
+        satisfying \eqref{measure on the product space, set function form}.
+        To that end, let $\hat{\pi}$ be another measure satisfying
+        \eqref{measure on the product space, set function form}.
+        Since $\mu$ is $\sigma$-finite, there is a measurable partition $(E_m)$
+        of $E$ such that $\mu(E_m)<\infty$ for each $m$.
+        Since $\kappa$ is $\sigma$-bounded, there is a measurable partition $(F_n)$
+        of $F$ such that $x\mapsto\kappa(x,F_n)$ is bounded for each $n$.
+        Note that the measurable rectangles $E_m\times F_n$ form a partition
+        of $E\times F$ and that, by the formula
+        \eqref{measure on the product space, set function form}
+        for $\pi$ and $\hat{\pi}$,
+        \[
+            \pi(E_m\times F_n)=\hat{\pi}(E_m\times F_n)<\infty
+        \]
+        for each $m$ and $n$. Use Theorem \ref{uniqueness theorem}.
+    \end{proof}
+    Repeated application of Theorem \ref{measures on the product space} yields
+    \begin{thm}
+        Let $\mu$ be a measure on $(E_1,\mathscr{E}_1)$, $\kappa_i$
+        an s-finite transition kernel from $(E_1\times\cdots\times E_i,\mathscr{E}_1\times\cdots\times\mathscr{E}_i)$
+        to $(E_{i+1},\mathscr{E}_{i+1})$ for $i=1,\dots,n-1$. Then there exists a unique measure $\pi$ on the product space
+        $(E_1\times\cdots\times E_n,\mathscr{E}_1\otimes\cdots\otimes \mathscr{E}_n)$ such that for all $u\in\overline{\mathscr{E}_1\otimes\cdots\otimes \mathscr{E}_n}_+$
+        \[
+        \int_\pi u
+        =\int_{\mu(\odif{x_1})}\int_{\kappa_1(x_1,\odif{x_2})}\cdots \int_{\kappa_{n-1}(x_1,\dots,x_{n-1},\odif{x_n})}u(x_1,\dots,x_{n-1},x_n)
+        \]
+    \end{thm}
+    In this case, the measure $\pi$ may be denoted by $\mu(\odif{x_1})\kappa_1(x_1,\odif{x_2})\cdots\kappa_{n-1}(x_1,\dots,x_{n-1},\odif{x_n})$.
+\subsection{Transition densities}
+    Ex6.30 of chapter I of GTM261.
+\section{Fubini-Tonelli theorem}
+    \begin{thm}\label{Fubini-Tonelli}
+        Let $\mu$ and $\nu$ be $s$-finite measures on $(E,\mathscr{E})$ and $(F,\mathscr{F})$ respectively. 
+
+        Then there exists a unique measure $\pi$ on the product space $(E\times F,\mathscr{E}\otimes \mathscr{F})$ such that 
+        \begin{equation}\label{Fubini's measure formula}
+            \int_\pi u=\int_{\mu(\odif x)}\int_{\nu(\odif y)} u(x,y)=\int_{\nu(\odif y)}\int_{\mu(\odif x)} u(x,y)\qquad \forall u\in \overline{\mathscr{E}\otimes\mathscr{F}}_+
+        \end{equation}
+        Moreover, $\pi$ is $s$-finite; if $\mu$ and $\nu$ are $\sigma$-finite, then $\pi$ is $\sigma$-finite, and is the unique measure on that product space satisfying
+        \begin{equation}\label{product measure formula}
+            \pi(A\times B)=\mu(A)\cdot \nu(B)\qquad \forall A\in\mathscr{E}\quad\forall B\in\mathscr{F}
+        \end{equation}
+    \end{thm}
+    \begin{proof}
+        Let $h:F\times E\rightarrow E\times F,\,\,(y,x)\mapsto (x,y)$, which is clearly measurable. 
+        By Theorem \ref{measures on the product space}, there exists a unique measure 
+        $\pi$ on $(E\times F,\mathscr{E}\otimes \mathscr{F})$ satisfying 
+        $\int_\pi u=\int_{\mu}\int_{\nu} u$ for all $u\in \overline{\mathscr{E}\otimes\mathscr{F}}_+$,
+        as well as a unique measure $\tilde{\pi}$ on $(F\times E,\mathscr{F}\otimes \mathscr{E})$ satisfying $\int_{\tilde{\pi}} v=\int_{\nu}\int_{\mu} v$ for all $v\in \overline{\mathscr{F}\otimes\mathscr{E}}_+$. 
+        In particular, $\pi(A\times B)=\mu(A)\cdot \nu(B)=\tilde{\pi}(B\times A)=h_*\tilde{\pi}(A\times B)$ for all $A\in\mathscr{E}, B\in\mathscr{F}$.  
+        If $\mu$, $\nu$ are $\sigma$-finite, then Theorem \ref{measures on the product space} applies with the $\sigma$-bounded kernel $\kappa(x,B):=\nu(B)$ to give the second part of the theorem, from which follows $\pi=h_*\tilde{\pi}$ and hence $\int_{\mu}\int_{\nu} u=\int_{h_*\tilde{\pi}} u=\int_{\tilde{\pi}} u\circ h=\int_{\nu}\int_{\mu} u\circ h$. That is, \eqref{Fubini's measure formula} holds for $\mu,\nu$ $\sigma$-finite, and in particular, for $\mu,\nu$ finite. By Theorem \ref{integration w.r.t. a series of measures}, if $\mu=\sum_i\mu_i$ and $\nu=\sum_j\nu_j$, then $\int_\pi u=\int_{\mu}\int_{\nu} u=\sum_i\sum_j\int_{\mu_i}\int_{\nu_j}u=\sum_i\sum_j\int_{\nu_j}\int_{\mu_i}u=\sum_j\sum_i\int_{\nu_j}\int_{\mu_i}u=\int_{\nu}\int_{\mu} u$, from which it is clear that $\pi=\sum_{i,j}\mu_i\times\nu_j$ is $s$-finite, where $\mu_i\times\nu_j$ is the unique measure defined by $\int_{\mu_i\times\nu_j}u=\int_{\mu_i}\int_{\nu_j}u$.
+    \end{proof}
+    Repeated application of Theorem \ref{Fubini-Tonelli} yields
+    \begin{thm}
+        Let $\mu_1,\dots,\mu_n$ be $s$-finite measures on $(E_1,\mathscr{E}_1),\dots,(E_n,\mathscr{E}_n)$ respectively. Then there exists a unique measure $\pi$ on the product space $(E_1\times \cdots\times E_n,\mathscr{E}_1\otimes\cdots\otimes\mathscr{E}_n)$ such that
+        \[
+            \int_\pi u=\int_{\mu(\odif{x_1})}\int_{\mu(\odif{x_2})}\cdots \int_{\mu(\odif{x_n})} u(x_1,x_2,\dots,x_n)\qquad \forall u\in\overline{\mathscr{E}_1\otimes\cdots\otimes\mathscr{E}_n}_+
+        \]
+        and the integrals on the right side can be performed in any order desired.
+    \end{thm}
+    Without the assumption of $s$-finiteness, the theorem may not hold. Let $E=F=[0,1]$ and $\mathscr{E}=\mathscr{F}=\mathscr{B}([0,1])$. Let $\lambda$ be the Lebesgue measure on $\mathscr{E}$ and $\nu$ the counting measure on $\mathscr{F}$.
+    Define
+    \[
+        D=\{(x,y)\in [0,1]^2:x=y\}.
+    \]
+    Then
+    \[
+        \int_{\lambda(\odif x)}\int_{\nu(\odif y)} \mathbbm{1}_{D}(x,y)=1\neq 0=\int_{\nu(\odif y)} \int_{\lambda(\odif x)}\mathbbm{1}_{D}(x,y)
+    \]
+    despite that $x\mapsto \int_{\nu(\odif y)} \mathbbm{1}_{D}(x,y)\equiv 1$ and $y\mapsto \int_{\lambda(\odif x)}\mathbbm{1}_{D}(x,y)\equiv 0$ are measurable.
+    % \begin{thm}
+    % Let $\mathscr{A}=\sigma(\mathscr{F})$ and $\mathscr{B}=\sigma(\mathscr{G})$. If $\mathscr{F}$ exhausts  $X$ and $\mathscr{G}$ exhausts $Y$, then
+    % \[\mathscr{A}\otimes \mathscr{B}=\sigma(\mathscr{F}\times \mathscr{G})\]
+    % \end{thm}
+    \begin{thm}
+        Let $\mathscr{A}=\sigma(\mathscr{F})$ and $\mathscr{B}=\sigma(\mathscr{G})$. If 
+        \begin{enumerate}
+            \item $\mathscr{F},\mathscr{G}$ are $\cap$-closed.
+            \item $\{\mu|_\mathscr{F}<\infty\}$ exhausts $X$ and $\{\nu|_\mathscr{G}<\infty\}$ exhausts $Y$.
+        \end{enumerate}
+        then there exists at most one measure $\rho$ on $(X\times Y,\mathscr{A}\otimes \mathscr{B})$ satisfying
+        \[
+            \rho(F\times G)=\mu(F)\cdot \nu(G)
+        \]
+    \end{thm}
+    \begin{crl}
+        If $n>d\geqslant 1$, then
+        \[(\mathbb{R}^n,\mathscr{B}(\mathbb{R}^n),\lambda^n)=\left(\mathbb{R}^d\times \mathbb{R}^{n-d},\mathscr{B}(\mathbb{R}^d)\otimes \mathscr{B}(\mathbb{R}^{n-d}),\lambda^d\times \lambda^{n-d}\right)\]
+    \end{crl}
+\subsection{Fubini's theorem}
+    Let $\mu$ be a measure on $X$ and $\nu$ a measure on $Y$.
+    \begin{thm}
+        If $\mu$ and $\nu$ are $\sigma$-finite, then 
+        \begin{tight_enumerate}
+            \item for all $u\in\mathcal{M}(\mathscr{A}\otimes\mathscr{B};\overline{\mathbb{R}}_+)$, the functions
+            \[
+                y\mapsto \int u(x,y)\mu(dx),\quad x\mapsto \int u(x,y)\nu(dy)
+            \]
+            are measurable and
+            \[
+                \int u\odif (\mu\times\nu)=\iint u(x,y)\mu(\odif x)\nu(\odif y)=\iint u(x,y)\nu(\odif y)\mu(\odif x)
+            \]
+            \item for all $u\in\mathcal{M}(\mathscr{A}\otimes\mathscr{B};\mathbb{K})$, if at least one of the integrals
+            \[\int |u|\odif(\mu\times\nu),\quad \iint |u(x,y)|\mu(\odif x)\nu(\odif y),\quad \iint |u(x,y)|\nu(\odif y)\mu(\odif x)\]
+            $<\infty$ then all three integrals $<\infty$, $u\in L^1_\mathbb{K}(\mu\times\nu)$, and
+            \begin{gather*}
+                u(\bullet,y)\in L^1_\mathbb{K}(\mu)\text{ for $\nu$-a.a. }y\in Y\\
+                u(x,\bullet)\in L^1_\mathbb{K}(\nu)\text{ for $\mu$-a.a. }x\in X\\
+                y\mapsto \int u(x,y)\mu(d x)\text{ is a measurable $\nu$-almost function }Y\rightarrow \mathbb{K}\text{ and is in }L^1_\mathbb{K}(\nu)\\
+                x\mapsto \int u(x,y)\mu(d y)\text{ is a measurable $\mu$-almost function }X\rightarrow \mathbb{K}\text{ and is in }L^1_\mathbb{K}(\mu)\\
+                \int u\odif (\mu\times\nu)=\iint u(x,y)\mu(\odif x)\nu(\odif y)=\iint u(x,y)\nu(\odif y)\mu(\odif x)
+            \end{gather*}
+        \end{tight_enumerate}
+    \end{thm}
+\subsection{*For Complete Sigma-Finite measures}
+\subsection{The tail formula}
+    \begin{thm}\label{thm:tail_formula}
+        Let $\mu$ be an $s$-finite measure on $(E,\mathscr{E})$ and $u\in\mf{E}_+$.
+        \begin{equation}\label{eq:tail_formula}
+            \int_\mu u=\int_0^\infty \mu(\{u>t\})\odif t=\int_0^\infty \mu(\{u\geqslant t\})\odif t
+        \end{equation}
+        If $\varphi:\mathbb{R}_+\rightarrow\mathbb{R}_+$ with $\varphi(0)=0$ is increasing and continuously differentiable, then
+        \begin{equation}\label{eq:tail_formula_generalized}
+            \int_\mu \overline{\varphi}\circ u=\int_0^\infty \varphi'(t)\mu\{u> t\}\odif t
+        \end{equation}
+        where $\overline{\varphi}:\er_+\rightarrow \er_+$ is the continuous extension of $\varphi$, i.e., $\overline{\varphi}(\infty)=\sup\varphi$.
+    \end{thm}
+    \begin{proof}
+        By Fubini-Tonelli theorem, 
+        \[
+            \int_{\mathbb{R}_+}\mu(\{u>t\})\odif t=\int_{\mathbb{R}_+} \int_\mu\mathbbm{1}_{\{u>t\}}\odif t=\int_{\mu(\odif x)}\int_{\mathbb{R}_+}\mathbbm{1}_{\{u>t\}}(x)\odif t=\int_{\mu(\odif x)}\int_{\mathbb{R}_+}\mathbbm{1}_{[0,u(x)[}(t)\odif t=\int_\mu u
+        \]
+        and the equalities remain valid if $>$ is replaced with $\geqslant$ and $\mathbbm{1}_{[0,u(x)[}$ with $\mathbbm{1}_{[0,u(x)]}$.
+
+        For $x\in E$ fixed, by Theorem \ref{fundamental theorem of calculus for increasing function}, $\overline{\varphi}(u(x))=\int_0^{u(x)}\varphi'(t)\odif t=\int_0^\infty \varphi'(t)\mathbbm{1}_{\{u>t\}}(x)\odif t$.
+    \end{proof}
+    \begin{thm}\label{tail formula for Lp norm}
+        Let $u\in\overline{\mathscr{E}}$. For $p>0$,
+        \[\|u\|_p^p=\int_\mu |u|^p=\int_0^\infty pt^{p-1}\mu\{|u|> t\}\odif t\]
+    \end{thm}
+    \begin{proof}
+        Let $\varphi:\mathbb{R}_+\rightarrow\mathbb{R}_+,\,\,x\mapsto x^p$ in Theorem \ref{thm:tail_formula}.
+    \end{proof}
+\subsection{Moments of positive random variables}
+    \begin{thm}
+        Let $X$ be a $\er_+$-valued random variable. For $p>0$,
+        \[
+            \mathbb{E}(X^p)=\int_0^\infty px^{p-1}\mathbb{P}(\{X>x\})\odif x
+        \]
+        In particular, for $X$ taking values in $\overline{\mathbb{Z}}_+=\mathbb{N}\cup\{0,\infty\}$,
+        \[
+            \mathbb{E}X=\sum_{n=0}^\infty \mathbb{P}(\{X>n\}),\quad \mathbb{E}(X^2)=2\sum_{n=0}^\infty n\cdot \mathbb{P}(\{X>n\})+\mathbb{E}X
+        \]
+    \end{thm}
+    \begin{proof}
+        Theorem \ref{tail formula for Lp norm}.
+    \end{proof}
+\subsection{The error function}
+    \[\int_{\mathbb{R}_+} e^{-t^2}\odif \lambda^1=\frac{\sqrt{\pi}}{2}\]
+    \begin{proof}
+        Let $I=\displaystyle \int_{\mathbb{R}_+} e^{-t^2}\odif \lambda^1$.
+        \begin{align*}
+            I^2&=\int_{\mathbb{R}_+} \left(\int_{\mathbb{R}_+} e^{-x^2}\lambda^1(\odif x)\right) e^{-y^2}\lambda^1(\odif y)\\
+            &=\int_{\mathbb{R}_+} \int_{\mathbb{R}_+} e^{-(x^2+y^2)}\lambda^1(\odif x)\lambda^1(\odif y)
+        \end{align*}
+    \end{proof}
+    \begin{define}
+        The \textit{error function} is
+        \[
+            \operatorname{erf} z:=\frac{2}{\sqrt{\pi}}\int_0^z e^{-t^2}\odif t
+        \]
+    \end{define}
+\section{Independence}
+    \begin{thm}
+        If $X,Y$ are independent, then they are orthogonal, i.e., $\Cov (X,Y)=0$, i.e., $\mathbb{E}(XY)=\mathbb{E}X\cdot\mathbb{E}Y$.
+    \end{thm}
 \chapter{\texorpdfstring{$L^p$}{Lp} Spaces}
     Let $(X,\mathscr{A},\mu)$ be a measure space. Let $\mathbb{K}\in\{\mathbb{R},\mathbb{C}\}$.
 \section{The Banach Space \texorpdfstring{$L^p(\mu)$}{Lp}}
