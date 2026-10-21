@@ -1,0 +1,59 @@
+<p>Each chapter has its own page. All chapters share one set of macros and one
+  system of statement and section references.</p>
+
+<article class="statement" id="def-indicator" data-kind="Definition">
+  <p>For a subset \(A\subseteq E\), define</p>
+  <div class="math-block">\[
+    \mathbbm{1}_A(x)=
+    \begin{cases}
+      1 &amp; x\in A,\\
+      0 &amp; x\notin A.
+    \end{cases}
+  \]</div>
+</article>
+
+<article class="statement" id="thm-indicator-integral" data-kind="Theorem" data-title="Integral of an indicator">
+  <p>Let \((E,\mathscr{E},\mu)\) be a measure space. For \(A\in\mathscr{E}\),</p>
+  <div class="math-block">
+    \begin{equation}\label{eq:indicator}
+      \int_E \mathbbm{1}_A(x)\odif\mu(x)=\mu(A).
+    \end{equation}
+  </div>
+</article>
+<details class="proof">
+  <summary>Proof</summary>
+  <div class="proof-body">
+    <p>The indicator is a nonnegative simple function, so the identity follows
+      directly from the definition of its integral.</p>
+    <p class="qed" aria-label="End of proof">□</p>
+  </div>
+</details>
+
+<p>The preceding result is <a data-ref="thm-indicator-integral"></a>.
+  Its equation can also be cited as \(\eqref{eq:indicator}\).</p>
+
+<h3>Aligned mathematics</h3>
+<p>For \(A,B\in\mathscr{E}\) and \(a,b\geq0\),</p>
+<div class="math-block">\[
+  \begin{aligned}
+    \int_E (a\mathbbm{1}_A+b\mathbbm{1}_B)\odif\mu
+      &amp;=a\int_E\mathbbm{1}_A\odif\mu
+       +b\int_E\mathbbm{1}_B\odif\mu\\
+      &amp;=a\mu(A)+b\mu(B).
+  \end{aligned}
+\]</div>
+<p>Here the usual convention \(0\cdot\infty=0\) applies.</p>
+
+<h3>Cross-chapter references</h3>
+<p>Return to <a data-ref="thm-bounded"></a>, or jump directly to
+  <a href="#bound-step">the inequality inside its proof</a>.
+  That link automatically opens the proof.</p>
+
+<h3>Notation samples</h3>
+<div class="math-block">\[
+  \bm{v},\qquad \norm{x},\qquad \braket{x}{y},\qquad
+  \mathscr{A},\qquad f\coloneqq g+h,\qquad \ket{0}.
+\]</div>
+<p class="remark"><strong>Your next chapter.</strong> Copy a chapter file, edit its content,
+  and add another <code>data-chapter</code> section to <code>index.html</code>.
+  The contents list and statement numbers update automatically.</p>

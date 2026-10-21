@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mathematics — Personal notes</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="math-config.js"></script>
+  <script defer src="notes.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#chapters">Skip to notes</a>
+  <aside class="sidebar">
+    <a class="brand" href="index.html">Contents<span>.</span></a>
+    <nav aria-label="Chapters"><ol id="contents" role="list"></ol></nav>
+    <!-- <p class="sidebar-note">utakata</p> -->
+  </aside>
+  <main id="top">
+    <header class="page-header">
+      <!-- <p class="eyebrow">Definitions · Theorems · Proofs</p> -->
+      <h1 id="chapter-heading"><span class="chapter-label" id="chapter-label"></span> <span class="chapter-title" id="chapter-title">Mathematics</span></h1>
+      <!-- <p class="subtitle">A notebook for understanding, one result at a time.</p> -->
+      <div class="toolbar" aria-label="Proof controls" hidden>
+        <button id="expand-proofs" type="button">Expand all proofs</button>
+        <button id="collapse-proofs" type="button">Collapse all proofs</button>
+        <button id="print-notes" type="button">Print with proofs</button>
+      </div>
+    </header>
+    <p id="status" role="status">Loading chapters…</p>
+    <noscript>Enable JavaScript to load the chapter files and typeset mathematics.</noscript>
+
+    <!-- Add chapters here, in reading order. These paths are relative to index.html. -->
+    <div id="chapters">
+      <section class="chapter" id="sequences" data-chapter="chapters/01-sequences.html" data-title="Sequences"></section>
+      <section class="chapter" id="integration" data-chapter="chapters/02-integration.html" data-title="Integration"></section>
+    </div>
+    <nav id="chapter-navigation" aria-label="Chapter navigation" hidden>
+      <a id="next-chapter" rel="next"></a>
+    </nav>
+    <!-- <footer>by uphyrdia</footer> -->
+  </main>
+</body>
+</html>
