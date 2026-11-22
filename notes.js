@@ -66,10 +66,8 @@ function contentsLink(number, title, href) {
 
 function showChapterIndex(chapters) {
   document.getElementById('chapter-label').replaceChildren();
-  document.getElementById('chapter-title').textContent = 'Mathematics';
   document.querySelector('.toolbar').hidden = true;
   document.getElementById('chapter-navigation').hidden = true;
-  document.title = 'Mathematics — Personal notes';
   const list = document.createElement('ol');
   list.className = 'chapter-list';
   list.setAttribute('role', 'list');
@@ -213,7 +211,7 @@ function connectReferences(activeChapter, targets, labels) {
 async function initializeMathJax() {
   await new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml-nofont.js';
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-svg-nofont.js';
     script.onload = resolve;
     script.onerror = () => reject(new Error('MathJax download failed'));
     document.head.append(script);
@@ -305,7 +303,6 @@ async function start() {
   document.getElementById('chapter-label').replaceChildren('Chapter ', chapterNumber);
   document.getElementById('chapter-title').textContent = activeChapter.dataset.title;
   activeChapter.setAttribute('aria-labelledby', 'chapter-heading');
-  document.title = `Chapter ${activeIndex + 1}: ${activeChapter.dataset.title} — Mathematics`;
   const nextChapter = chapters[activeIndex + 1];
   if (nextChapter) {
     const nextLink = document.getElementById('next-chapter');

@@ -38,6 +38,8 @@ body { margin:0; background:var(--paper); color:var(--ink); font:18px/1.75 var(-
 /* MathJax 4 uses data-mjx-href links with its own default/visited colors. */
 a, #chapters mjx-container a[data-mjx-href] { color:var(--accent); text-underline-offset:3px; }
 a:hover, #chapters mjx-container a[data-mjx-href]:hover { color:#0d403c; }
+/* SVG equation links paint glyphs with fill/stroke rather than color alone. */
+#chapters mjx-container[jax="SVG"] a[data-mjx-href] { fill:currentColor; stroke:currentColor; }
 button,a,summary { -webkit-tap-highlight-color:transparent; }
 :focus-visible { outline:3px solid #c89541; outline-offset:5px; }
 .sidebar { position:fixed; inset:0 auto 0 0; width:340px; background:#f0f3ee; padding:40px 30px; border-right:1px solid var(--rule); overflow:auto; }
