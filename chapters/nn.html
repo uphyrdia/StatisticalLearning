@@ -82,3 +82,119 @@
     These vectors span the domain, so \(K=L\).
   </p>
 \end{proof}
+
+\subsection{Why parameters are shared across pixels}\label{sec-shared-parameters}
+<p>For \(q=(q_1,q_2)\in\ZZ^2\) write \(e_q=e_{q_1}\otimes e_{q_2}\), and for a tensor
+  \(y=\sum_{q\in\ZZ^2}y(q)\otimes e_q\) call \(y(q)\) the \textit{value} of \(y\) at the pixel \(q\).
+  For \(u=(u_1,u_2)\in\ZZ^2\) write \(S_u=S_{u_1,u_2}\). Since \(T_ae_n=e_{n-a}\),
+  \[
+    (S_uy)(q)=y(q+u)\qquad\forall q,u\in\ZZ^2.
+  \]
+  Shifts never commute with a layer that has a nonzero bias, since the bias is supported on the
+  finite output window. The right notion is therefore equivariance away from the edges of the window.
+</p>
+\begin{def}\label{def-equivariant-on}
+  <p>Let \(\Omega\subset\ZZ^2\). A map \(f\) from inputs to outputs is
+    \textit{equivariant on} \(\Omega\) if, for all inputs \(x\) and all \(u\in\ZZ^2\),
+    \[
+      f(S_ux)(q)=\bigl(S_uf(x)\bigr)(q)\qquad\text{whenever }q\in\Omega\text{ and }q+u\in\Omega.
+    \]
+    That is, shifting the input shifts the output, except at pixels shifted into or out of
+    \(\Omega\). The same definition applies to maps from outputs to outputs.
+  </p>
+\end{def}
+
+\begin{thm}\label{thm-shared-bias}
+  <p>Let \(\Omega\subset\ZZ^2\), let \(K\) be a linear map from inputs to outputs commuting with all
+    shifts, and let \(b_q\in\RR^{c_\text{out}}\) for \(q\in\Omega\). The map
+    \[
+      f(x)=Kx+\sum_{q\in\Omega}b_q\otimes e_q
+    \]
+    is equivariant on \(\Omega\) if and only if \(b_q\) does not depend on \(q\).
+  </p>
+  <p>In particular, a convolutional layer (<a data-ref="def-convolution"></a>) with stride \(1\)
+    and any padding is equivariant on its output window
+    \(\Omega=\{0,\dots,w'\}\times\{0,\dots,h'\}\), because its linear part
+    \(\sum_{i,j}W_{i,j}\otimes T_{i-p}\otimes T_{j-p}\) commutes with all shifts
+    (<a data-ref="thm-conv-equivariance"></a>). A bias that varied from pixel to pixel would break
+    this.
+  </p>
+\end{thm}
+\begin{proof}
+  <p>Let \(q,q+u\in\Omega\). Since \(K\) commutes with \(S_u\),
+    \[
+      \begin{aligned}
+        f(S_ux)(q)&amp;=(S_uKx)(q)+b_q=(Kx)(q+u)+b_q,\\
+        \bigl(S_uf(x)\bigr)(q)&amp;=f(x)(q+u)=(Kx)(q+u)+b_{q+u}.
+      \end{aligned}
+    \]
+    So \(f\) is equivariant on \(\Omega\) if and only if \(b_q=b_{q+u}\) whenever
+    \(q,q+u\in\Omega\). Any two pixels \(q,q'\in\Omega\) are related by the shift \(u=q'-q\), so
+    this says exactly that \(b_q\) is constant on \(\Omega\).
+  </p>
+\end{proof}
+
+<p>At inference, batch normalisation acts on the value of an output \(y\) at each pixel by an
+  affine map. Allowing separate parameters at each pixel \(q\in\Omega\), it is
+  \[
+    g(y)=\sum_{q\in\Omega}\bigl(D_q\,y(q)+\beta'_q\bigr)\otimes e_q,
+    \qquad
+    D_q=\mathrm{diag}\Bigl(\frac{\gamma_\ell}{\sigma_{\ell,q}}\Bigr)_{\ell},
+    \quad
+    \beta'_q=\Bigl(\beta_\ell-\frac{\gamma_\ell\,\mu_{\ell,q}}{\sigma_{\ell,q}}\Bigr)_{\ell},
+  \]
+  where \(\ell\) runs over the channels, \(\mu_{\ell,q}\) and \(\sigma_{\ell,q}^2\) are the mean and
+  variance used for channel \(\ell\) at pixel \(q\), and \(\gamma_\ell,\beta_\ell\) are the learnable
+  scale and shift.
+</p>
+\begin{thm}\label{thm-batch-norm}
+  <p>Let \(\Omega\subset\ZZ^2\), and for \(q\in\Omega\) let \(D_q:\RR^{c}\to\RR^{c}\) be linear and
+    \(\beta'_q\in\RR^{c}\). Let \(g(y)=\sum_{q\in\Omega}\bigl(D_q\,y(q)+\beta'_q\bigr)\otimes e_q\).
+  </p>
+  <ol>
+    <li>\(g\) is equivariant on \(\Omega\) if and only if \(D_q\) and \(\beta'_q\) do not depend
+      on \(q\).</li>
+    <li>In that case, \(g\circ f\) is equivariant on \(\Omega\) for every map \(f\) that is
+      equivariant on \(\Omega\).</li>
+  </ol>
+  <p>In particular, take batch normalisation with \(\gamma_\ell\neq0\). Then \(g\circ f\) is equivariant
+    on \(\Omega\) for every \(f\) equivariant on \(\Omega\), such as a convolutional layer of
+    stride \(1\) with output window \(\Omega\), if and only if \(\mu_{\ell,q}\) and \(\sigma_{\ell,q}\)
+    do not depend on \(q\). That is, there is one mean and one variance per channel, shared by all
+    pixels.
+  </p>
+\end{thm}
+\begin{proof}
+  <p>\textit{Part 1.} Let \(q,q+u\in\Omega\). Then
+    \[
+      \begin{aligned}
+        g(S_uy)(q)&amp;=D_q\,(S_uy)(q)+\beta'_q=D_q\,y(q+u)+\beta'_q,\\
+        \bigl(S_ug(y)\bigr)(q)&amp;=g(y)(q+u)=D_{q+u}\,y(q+u)+\beta'_{q+u}.
+      \end{aligned}
+    \]
+    If \(D_q\) and \(\beta'_q\) are constant, the two sides agree. Conversely, taking \(y=0\) gives
+    \(\beta'_q=\beta'_{q+u}\). Taking \(y=v\otimes e_{q+u}\) then gives \(D_qv=D_{q+u}v\) for all
+    \(v\in\RR^c\). As in the proof of <a data-ref="thm-shared-bias"></a>, any two pixels of
+    \(\Omega\) are related by a shift, so \(D_q\) and \(\beta'_q\) are constant on \(\Omega\).
+  </p>
+  <p>\textit{Part 2.} Write \(D\) and \(\beta'\) for the constant values. Let \(q,q+u\in\Omega\).
+    Since \(f\) is equivariant on \(\Omega\),
+    \[
+      g\bigl(f(S_ux)\bigr)(q)=D\,f(S_ux)(q)+\beta'=D\,f(x)(q+u)+\beta'=g\bigl(f(x)\bigr)(q+u)
+        =\bigl(S_u\,g(f(x))\bigr)(q).
+    \]
+  </p>
+  <p>\textit{In particular.} If \(\mu_{\ell,q}\) and \(\sigma_{\ell,q}\) are constant,
+    then so are \(D_q\) and \(\beta'_q\), and part 2 applies. For the \textit{only if} direction, take \(f=\mathrm{id}\),
+    which is equivariant on every \(\Omega\). Then \(g\circ f=g\) is equivariant on \(\Omega\), so by
+    part 1, \(D_q\) and \(\beta'_q\) are constant. Since \(\gamma_\ell\neq0\), \(D_q\) constant means
+    \(\sigma_{\ell,q}\) is constant, and then \(\beta'_q\) constant means \(\mu_{\ell,q}\) is
+    constant.
+  </p>
+\end{proof}
+<p class="remark"><strong>Estimating the statistics.</strong> The theorem says only that the mean
+  and variance must be shared across pixels. It does not say how to estimate them. Pooling over the
+  batch and all pixels is a good estimate when the data are roughly stationary, i.e. feature
+  \(\ell\) has about the same distribution at every pixel. Then all \(B\cdot\lvert\Omega\rvert\)
+  values of channel \(\ell\) in a batch of size \(B\) are samples of the same quantity.
+</p>
