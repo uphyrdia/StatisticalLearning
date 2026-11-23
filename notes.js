@@ -4,14 +4,7 @@ const chapterRoot = document.getElementById('chapters');
 const statusLine = document.getElementById('status');
 const proofElements = () => [...chapterRoot.querySelectorAll('details.proof')];
 
-document.getElementById('expand-proofs').onclick = () => {
-  proofElements().forEach(proof => { proof.open = true; });
-};
-document.getElementById('collapse-proofs').onclick = () => {
-  proofElements().forEach(proof => { proof.open = false; });
-};
-
-// Also works with the browser's own Print menu. Restore the reader's view afterwards.
+// Print with all proofs open, then restore the reader's view afterwards.
 let printState = null;
 window.addEventListener('beforeprint', () => {
   if (printState) return;
@@ -23,7 +16,6 @@ window.addEventListener('afterprint', () => {
   printState.forEach(([proof, wasOpen]) => { proof.open = wasOpen; });
   printState = null;
 });
-document.getElementById('print-notes').onclick = () => window.print();
 
 // Open a closed proof when a link points to something inside it.
 function revealTarget() {
@@ -50,6 +42,100 @@ function chapterURL(chapter, targetId = '') {
   return url.pathname + url.search + url.hash;
 }
 
+// Chapter shorthand: \begin{thm} ... \end{thm} and friends become HTML blocks.
+// An optional \label{some-id} right after \begin{...} gives the block an id,
+// which <a data-ref="some-id"></a> can cite. Other environments, such as
+// \begin{aligned} inside mathematics, are left for MathJax.
+const statement = kind => ({
+  open: id => `<article class="statement"${id} data-kind="${kind}">`,
+  close: '</article>'
+});
+const environments = new Map([
+  ['thm', statement('Theorem')],
+  ['def', statement('Definition')],
+  ['proof', {
+    open: id => `<details class="proof"${id}><summary>Proof</summary><div class="proof-body">`,
+    close: '<p class="qed" aria-label="End of proof">□</p></div></details>'
+  }]
+]);
+
+// Commands with one braced argument. \section{...} and \subsection{...} may be
+// followed by \label{some-id}; without one they get an automatic id.
+const commands = new Map([
+  ['textit', text => `<i>${text}</i>`],
+  ['section', (text, id) => `<h3 class="section-heading"${id}>${text}</h3>`],
+  ['subsection', (text, id) => `<h4 class="subsection-heading"${id}>${text}</h4>`]
+]);
+// Group 1 is mathematics that MathJax typesets, which commands must not touch:
+// $$...$$, \[...\], \(...\), a literal \$, $...$, and \begin{env}...\end{env}.
+// Group 3 is the name of a command to expand.
+const mathOrCommand = new RegExp(
+  String.raw`(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\)|\\\$|\$[\s\S]*?\$` +
+  String.raw`|\\begin\{([\w*]+)\}[\s\S]*?\\end\{\2\})` +
+  String.raw`|\\(${[...commands.keys()].join('|')})\{`, 'g');
+
+// Index of the brace that closes the one opened just before `start`, or -1.
+function closingBrace(text, start) {
+  let depth = 1;
+  for (let i = start; i < text.length; i++) {
+    if (text[i] === '\\') i++; // skip escaped characters such as \{ and \}
+    else if (text[i] === '{') depth++;
+    else if (text[i] === '}' && --depth === 0) return i;
+  }
+  return -1;
+}
+
+function expandCommands(text) {
+  const pattern = new RegExp(mathOrCommand); // own lastIndex, for nested calls
+  let out = '';
+  let pos = 0;
+  for (let match; (match = pattern.exec(text));) {
+    const name = match[3];
+    if (!name) continue; // mathematics stays as written
+    const start = match.index + match[0].length;
+    const end = closingBrace(text, start);
+    if (end < 0) continue;
+    let after = end + 1;
+    let id = '';
+    if (name !== 'textit') {
+      const label = /^\s*\\label\{([^}]*)\}/.exec(text.slice(after));
+      if (label) {
+        id = ` id="${label[1]}"`;
+        after += label[0].length;
+      }
+    }
+    out += text.slice(pos, match.index) +
+      commands.get(name)(expandCommands(text.slice(start, end)), id);
+    pos = pattern.lastIndex = after;
+  }
+  return out + text.slice(pos);
+}
+
+// Display mathematics: a \label{some-id} inside \[ ... \] becomes an empty anchor
+// just before the display, for links such as <a href="#some-id">; MathJax does
+// not see it. (In numbered environments such as \begin{equation}, \label is
+// MathJax's own and works with \eqref.) \\[2pt] line spacing is not a display.
+function expandDisplayMath(html) {
+  return html.replace(/(?<!\\)\\\[([\s\S]*?)\\\]/g, (match, body) => {
+    let id = '';
+    body = body.replace(/\\label\{([^}]*)\}/, (_, label) => {
+      id = label;
+      return '';
+    });
+    return id ? `<span class="math-anchor" id="${id}"></span>\\[${body}\\]` : match;
+  });
+}
+
+function expandShorthand(html) {
+  // Expand statement environments first, so that the remaining
+  // \begin{...}...\end{...} pairs are all mathematics.
+  return expandCommands(expandDisplayMath(html
+    .replace(/\\begin\{(\w+)\}(?:\s*\\label\{([^}]*)\})?/g, (match, name, id) =>
+      environments.has(name) ? environments.get(name).open(id ? ` id="${id}"` : '') : match)
+    .replace(/\\end\{(\w+)\}/g, (match, name) =>
+      environments.has(name) ? environments.get(name).close : match)));
+}
+
 function contentsLink(number, title, href) {
   const link = document.createElement('a');
   link.className = 'contents-link';
@@ -66,7 +152,6 @@ function contentsLink(number, title, href) {
 
 function showChapterIndex(chapters) {
   document.getElementById('chapter-label').replaceChildren();
-  document.querySelector('.toolbar').hidden = true;
   document.getElementById('chapter-navigation').hidden = true;
   const list = document.createElement('ol');
   list.className = 'chapter-list';
@@ -179,8 +264,7 @@ function numberStatements(chapters) {
       const number = document.createElement('span');
       number.className = 'heading-number';
       number.textContent = statementNumber;
-      heading.append(`${kind} `, number,
-        statement.dataset.title ? ` (${statement.dataset.title})` : '');
+      heading.append(`${kind} `, number);
       statement.prepend(heading);
       if (statement.id) labels.set(statement.id, label);
     });
@@ -260,7 +344,7 @@ async function start() {
       const response = await fetch(chapter.dataset.chapter);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       // Only include your own trusted HTML fragments here.
-      chapter.innerHTML = await response.text();
+      chapter.innerHTML = expandShorthand(await response.text());
     } catch (error) {
       failures.push(chapter.dataset.chapter);
       const message = document.createElement('p');
@@ -295,7 +379,6 @@ async function start() {
   const activeIndex = chapters.indexOf(activeChapter);
   connectReferences(activeChapter, targets, labels);
   chapterRoot.replaceChildren(activeChapter);
-  document.querySelector('.toolbar').hidden = false;
 
   const chapterNumber = document.createElement('span');
   chapterNumber.className = 'heading-number';

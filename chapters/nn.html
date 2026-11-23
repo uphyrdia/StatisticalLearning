@@ -1,0 +1,84 @@
+\section{Convolutional neural networks}
+<p>Let \((e_n)_{n\in\ZZ}\) be the standard basis of \(\RR^{\oplus\ZZ}\). In this section, an input is a tensor
+  in \(\RR^{c_\text{in}}\otimes\RR^{\oplus\ZZ}\otimes \RR^{\oplus\ZZ}\), where \(c_\text{in}\in\NN\) is the
+  \textit{input channel dimension}; an output will be a tensor in 
+  \(\RR^{c_\text{out}}\otimes\RR^{\oplus\ZZ}\otimes \RR^{\oplus\ZZ}\), where \(c_\text{out}\in\NN\) is the
+  \textit{output channel dimension}. Assume further that the input is of the form
+  \[
+    \sum_{\substack{0\leqslant i\leqslant w-1\\ 0\leqslant j \leqslant h-1}}v_{i,j}\otimes e_i\otimes e_j,
+    \quad v_{i,j}\in\RR^{c_\text{in}}
+  \]
+  where \(w,h\in\NN\) specify the \textit{width} and \textit{height} of the input, respectively.
+</p>
+\subsection{Convolutional layers}
+\begin{def}\label{def-convolution}
+  <p>For \(\delta\in\ZZ, s\in\NN\), let
+    \[
+      T_{\delta,s}:\RR^{\oplus\ZZ}\rightarrow\RR^{\oplus\ZZ},\,\,e_{n}\mapsto
+      \begin{cases}
+        e_{(n-\delta)/s} &amp; \text{if }s\mid (n-\delta)\\
+        0 &amp; \text{otherwise}
+      \end{cases}
+    \]
+  </p>
+  <p>Let \(k,s\in\NN, p\in\NN\cup\{0\}\) with \(w+2p\geqslant k\) and \(h+2p\geqslant k\), and put
+    \(w'=\lfloor (w+2p-k)/s\rfloor\), \(h'=\lfloor (h+2p-k)/s\rfloor\). A 2D
+    \textit{convolutional layer} of \textit{size} \(k\), \textit{stride} \(s\), with
+    \textit{padding} \(p\), is the map
+    \[
+      x\longmapsto
+        \Bigl(\sum_{i,j\in \{0,1,\dots,k-1\}}W_{i,j}\otimes T_{i-p,s}\otimes T_{j-p,s}\Bigr)(x)
+      \,+\,b\otimes\sum_{0\leqslant i\leqslant w'}e_i\otimes\sum_{0\leqslant j\leqslant h'}e_j
+    \]
+    where \((W_{i,j})\) is a family of learnable linear maps
+    \(\RR^{c_\text{in}}\rightarrow \RR^{c_\text{out}}\) called the
+    \textit{kernel} of the convolutional layer, and \(b\in\RR^{c_\text{out}}\) a learnable vector
+    called the \textit{bias} of the convolutional layer. The output has width \(w'+1\) and
+    height \(h'+1\).
+  </p>
+\end{def}
+
+\begin{thm}\label{thm-conv-equivariance}
+  <p>For \(a,b\in\ZZ\), write \(T_a\) for \(T_{a,1}\), the shift \(e_n\mapsto e_{n-a}\), and
+    \(S_{a,b}=\mathrm{id}\otimes T_a\otimes T_b\) for the shift by \((a,b)\) of an input or an
+    output. A linear map \(K\) from inputs to outputs commutes with all shifts,
+    \[
+      K\circ S_{a,b}=S_{a,b}\circ K\qquad\forall a,b\in\ZZ,
+    \]
+    if and only if there are a finite set \(F\subset\ZZ^2\) and linear maps
+    \(W_{i,j}:\RR^{c_\text{in}}\to\RR^{c_\text{out}}\), \((i,j)\in F\), such that
+    \[
+      K=\sum_{(i,j)\in F}W_{i,j}\otimes T_i\otimes T_j.
+    \]
+  </p>
+  <p>In particular, the linear part \(\sum_{i,j=0}^{k-1}W_{i,j}\otimes T_i\otimes T_j\) of a
+    convolutional layer with stride \(1\) and no padding (<a data-ref="def-convolution"></a>)
+    is shift-equivariant: shifting the input shifts the output by the same amount.
+  </p>
+\end{thm}
+\begin{proof}
+  <p>\textit{If.} \(T_iT_a=T_{i+a}=T_aT_i\), so each term \(W_{i,j}\otimes T_i\otimes T_j\)
+    commutes with \(S_{a,b}\), and hence so does their sum.
+  </p>
+  <p>\textit{Only if.} Since \(K(v\otimes e_0\otimes e_0)\) depends linearly on \(v\), there are
+    linear maps \(A_{m_1,m_2}:\RR^{c_\text{in}}\to\RR^{c_\text{out}}\) with
+    \[
+      K(v\otimes e_0\otimes e_0)=\sum_{m_1,m_2\in\ZZ}A_{m_1,m_2}(v)\otimes e_{m_1}\otimes e_{m_2}
+      \qquad\forall v\in\RR^{c_\text{in}},
+    \]
+    and only finitely many \(A_{m_1,m_2}\) are nonzero, because the images of a basis of
+    \(\RR^{c_\text{in}}\) have finite support. Put \(W_{i,j}=A_{-i,-j}\), let \(F\) be the set of
+    \((i,j)\) with \(W_{i,j}\neq0\), and let \(L=\sum_{(i,j)\in F}W_{i,j}\otimes T_i\otimes T_j\).
+    Since \(T_ie_0=e_{-i}\), we get \(L(v\otimes e_0\otimes e_0)=K(v\otimes e_0\otimes e_0)\).
+  </p>
+  <p>For any \(n_1,n_2\in\ZZ\), \(v\otimes e_{n_1}\otimes e_{n_2}=S_{-n_1,-n_2}(v\otimes e_0\otimes e_0)\).
+    Both \(K\) and \(L\) commute with shifts (\(L\) by the first part), so
+    \[
+      K(v\otimes e_{n_1}\otimes e_{n_2})
+        =S_{-n_1,-n_2}K(v\otimes e_0\otimes e_0)
+        =S_{-n_1,-n_2}L(v\otimes e_0\otimes e_0)
+        =L(v\otimes e_{n_1}\otimes e_{n_2}).
+    \]
+    These vectors span the domain, so \(K=L\).
+  </p>
+\end{proof}

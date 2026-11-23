@@ -16,6 +16,7 @@ window.MathJax = {
     macros: {
       RR: '\\mathbb{R}',
       NN: '\\mathbb{N}',
+      ZZ: '\\mathbb{Z}',
       EE: '\\mathbb{E}',
       PP: '\\mathbb{P}',
       // Convenience replacements, NOT full implementations of LaTeX packages:

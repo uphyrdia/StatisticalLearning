@@ -40,7 +40,7 @@ a, #chapters mjx-container a[data-mjx-href] { color:var(--accent); text-underlin
 a:hover, #chapters mjx-container a[data-mjx-href]:hover { color:#0d403c; }
 /* SVG equation links paint glyphs with fill/stroke rather than color alone. */
 #chapters mjx-container[jax="SVG"] a[data-mjx-href] { fill:currentColor; stroke:currentColor; }
-button,a,summary { -webkit-tap-highlight-color:transparent; }
+a,summary { -webkit-tap-highlight-color:transparent; }
 :focus-visible { outline:3px solid #c89541; outline-offset:5px; }
 .sidebar { position:fixed; inset:0 auto 0 0; width:340px; background:#f0f3ee; padding:40px 30px; border-right:1px solid var(--rule); overflow:auto; }
 .brand { font-size:48px; line-height:1; text-decoration:none; color:var(--ink); }
@@ -62,10 +62,6 @@ main { max-width:1115px; margin-left:340px; padding:60px clamp(24px,6vw,95px) 30
 .page-header { padding-bottom:35px; border-bottom:1px solid var(--rule); }
 h1 { font-size:clamp(40px,6vw,62px); letter-spacing:-.04em; line-height:1.15; font-weight:normal; margin:18px 0; }
 .subtitle { color:var(--muted); max-width:36em; }
-.toolbar { display:flex; flex-wrap:wrap; gap:8px; margin-top:25px; }
-.toolbar[hidden] { display:none; }
-button { font:13px/1.5 var(--text-font); padding:8px 13px; background:transparent; color:var(--accent); border:1px solid #bdcdc4; border-radius:5px; cursor:pointer; }
-button:hover { background:#edf3ed; }
 .chapter { margin-top:48px; }
 h2 { font-weight:bold; font-size:30px; line-height:1.3; margin:0 0 25px; }
 #chapter-heading { break-after:avoid; }
@@ -96,8 +92,10 @@ summary { padding:11px 0; color:var(--accent); font:700 14px/1.7 var(--text-font
 .error { color:#963b29; background:#fff0e8; padding:12px; overflow-wrap:anywhere; }
 #status:empty { display:none; }
 code { font: .88em var(--text-font); background:#eef0ea; padding:2px 4px; border-radius:3px; }
-.math-block { overflow-x:auto; }
-:target.statement, .proof-body :target { outline:2px solid #c89541; outline-offset:5px; }
+/* Wide displayed equations scroll sideways instead of running off the page. */
+#chapters mjx-container[display="true"] { overflow-x:auto; overflow-y:hidden; }
+/* A labelled display is linked through an empty anchor just before it; highlight the equation. */
+:target.statement, .proof-body :target:not(.math-anchor), .math-anchor:target + mjx-container { outline:2px solid #c89541; outline-offset:5px; }
 footer { margin-top:65px; padding-top:20px; border-top:1px solid var(--rule); font:12px var(--text-font); color:var(--muted); }
 .skip-link { position:absolute; left:12px; top:-100px; z-index:10; background:white; padding:10px; }
 .skip-link:focus { top:12px; }
@@ -111,7 +109,7 @@ footer { margin-top:65px; padding-top:20px; border-top:1px solid var(--rule); fo
   .statement { padding:15px; }
 }
 @media print {
-  .sidebar,.toolbar,.skip-link,#status,footer,#chapter-navigation { display:none; }
+  .sidebar,.skip-link,#status,footer,#chapter-navigation { display:none; }
   main { margin:0; max-width:none; padding:0; }
   body { font-size:11pt; background:white; color:black; }
   .page-header { padding-bottom:15px; }

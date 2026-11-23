@@ -1,59 +1,51 @@
 <!-- Chapter fragment: no html/head/body tags or script imports here. -->
 <p>We begin with convergence of real sequences. Proofs are hidden until you open them.</p>
 
-<!-- Sections: use h3.section-heading. Numbers are added automatically. -->
-<h3 class="section-heading" id="seq-convergence">Convergence</h3>
+<!-- Sections: write \section and the title in braces. Numbers are added automatically. -->
+\section{Convergence}\label{seq-convergence}
 
-<article class="statement" id="def-convergence" data-kind="Definition">
+\begin{def}\label{def-convergence}
   <p>A sequence \((x_n)_{n\geq1}\) converges to \(x\in\RR\) if, for every
-    \(\varepsilon>0\), there exists \(N\in\NN\) such that</p>
-  <div class="math-block">\[
-    n\geq N \implies |x_n-x|\lt\varepsilon.
-  \]</div>
-</article>
+    \(\varepsilon>0\), there exists \(N\in\NN\) such that
+    \[
+      n\geq N \implies |x_n-x|\lt\varepsilon.
+    \]</p>
+\end{def}
 
-<!-- Copy this heading to start another section; give it a unique id. -->
-<h3 class="section-heading" id="seq-properties">Properties of convergent sequences</h3>
+<!-- A \label after the title is optional; it gives the section a fixed id to link to. -->
+\section{Properties of convergent sequences}\label{seq-properties}
 
-<!-- Subsections: use h4.subsection-heading after a section heading. -->
-<h4 class="subsection-heading" id="seq-boundedness">Boundedness</h4>
+<!-- Subsections: use \subsection after a section heading. -->
+\subsection{Boundedness}\label{seq-boundedness}
 
-<article class="statement" id="thm-bounded" data-kind="Theorem">
+\begin{thm}\label{thm-bounded}
   <p>Every convergent real sequence is bounded.</p>
-</article>
-<details class="proof" id="proof-bounded">
-  <summary>Proof</summary>
-  <div class="proof-body">
-    <p>Suppose \(x_n\to x\). By <a data-ref="def-convergence"></a>, choose
-      \(N\geq1\) such that \(|x_n-x|\lt1\) whenever \(n\geq N\).</p>
-    <p>For those indices, the triangle inequality gives</p>
-    <div class="math-block" id="bound-step">\[
+\end{thm}
+\begin{proof}\label{proof-bounded}
+  <p>Suppose \(x_n\to x\). By <a data-ref="def-convergence"></a>, choose
+    \(N\geq1\) such that \(|x_n-x|\lt1\) whenever \(n\geq N\).</p>
+  <p>For those indices, the triangle inequality gives
+    \[\label{bound-step}
       |x_n|\leq |x_n-x|+|x|\lt 1+|x|.
-    \]</div>
-    <p>Thus the entire sequence is bounded by</p>
-    <div class="math-block">\[
+    \]</p>
+  <p>Thus the entire sequence is bounded by
+    \[
       M=\max\bigl(\{|x_k|:1\leq k\leq N\}\cup\{1+|x|\}\bigr).
-    \]</div>
-    <p class="qed" aria-label="End of proof">□</p>
-  </div>
-</details>
+    \]</p>
+\end{proof}
 
-<h4 class="subsection-heading" id="seq-uniqueness">Uniqueness of the limit</h4>
+\subsection{Uniqueness of the limit}\label{seq-uniqueness}
 
-<article class="statement" id="thm-unique-limit" data-kind="Theorem">
+\begin{thm}\label{thm-unique-limit}
   <p>A real sequence has at most one limit.</p>
-</article>
-<details class="proof">
-  <summary>Proof</summary>
-  <div class="proof-body">
-    <p>If \(x_n\to a\) and \(x_n\to b\), then</p>
-    <div class="math-block">\[
+\end{thm}
+\begin{proof}
+  <p>If \(x_n\to a\) and \(x_n\to b\), then
+    \[
       0\leq |a-b|\leq |a-x_n|+|x_n-b|\longrightarrow 0.
-    \]</div>
-    <p>Therefore \(a=b\).</p>
-    <p class="qed" aria-label="End of proof">□</p>
-  </div>
-</details>
+    \]</p>
+  <p>Therefore \(a=b\).</p>
+\end{proof}
 
 <p class="remark"><strong>Writing convention.</strong> Use <code>\lt</code> for a
   less-than sign inside mathematics. In raw HTML, escape literal less-than and
