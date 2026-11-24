@@ -1,97 +1,185 @@
 \section{Convolutional neural networks}
-<p>Let \((e_n)_{n\in\ZZ}\) be the standard basis of \(\RR^{\oplus\ZZ}\). In this section, an input is a tensor
-  in \(\RR^{c_\text{in}}\otimes\RR^{\oplus\ZZ}\otimes \RR^{\oplus\ZZ}\), where \(c_\text{in}\in\NN\) is the
-  \textit{input channel dimension}; an output will be a tensor in 
-  \(\RR^{c_\text{out}}\otimes\RR^{\oplus\ZZ}\otimes \RR^{\oplus\ZZ}\), where \(c_\text{out}\in\NN\) is the
-  \textit{output channel dimension}. Assume further that the input is of the form
-  \[
-    \sum_{\substack{0\leqslant i\leqslant w-1\\ 0\leqslant j \leqslant h-1}}v_{i,j}\otimes e_i\otimes e_j,
-    \quad v_{i,j}\in\RR^{c_\text{in}}
-  \]
-  where \(w,h\in\NN\) specify the \textit{width} and \textit{height} of the input, respectively.
+<p>Throughout, \(c_\text{in}\in\NN\) is the \textit{input channel dimension} and
+  \(c_\text{out}\in\NN\) the \textit{output channel dimension}. Points \(q\in\ZZ^2\) are called
+  \textit{pixels}, and \((e_q)_{q\in\ZZ^2}\) is the standard basis of \(\RR^{\oplus\ZZ^2}\). An input
+  is a tensor in \(\RR^{c_\text{in}}\otimes\RR^{\oplus\ZZ^2}\) and an output is a tensor in
+  \(\RR^{c_\text{out}}\otimes\RR^{\oplus\ZZ^2}\).
 </p>
-\subsection{Convolutional layers}
-\begin{def}\label{def-convolution}
-  <p>For \(\delta\in\ZZ, s\in\NN\), let
-    \[
-      T_{\delta,s}:\RR^{\oplus\ZZ}\rightarrow\RR^{\oplus\ZZ},\,\,e_{n}\mapsto
-      \begin{cases}
-        e_{(n-\delta)/s} &amp; \text{if }s\mid (n-\delta)\\
-        0 &amp; \text{otherwise}
-      \end{cases}
-    \]
-  </p>
-  <p>Let \(k,s\in\NN, p\in\NN\cup\{0\}\) with \(w+2p\geqslant k\) and \(h+2p\geqslant k\), and put
-    \(w'=\lfloor (w+2p-k)/s\rfloor\), \(h'=\lfloor (h+2p-k)/s\rfloor\). A 2D
-    \textit{convolutional layer} of \textit{size} \(k\), \textit{stride} \(s\), with
-    \textit{padding} \(p\), is the map
-    \[
-      x\longmapsto
-        \Bigl(\sum_{i,j\in \{0,1,\dots,k-1\}}W_{i,j}\otimes T_{i-p,s}\otimes T_{j-p,s}\Bigr)(x)
-      \,+\,b\otimes\sum_{0\leqslant i\leqslant w'}e_i\otimes\sum_{0\leqslant j\leqslant h'}e_j
-    \]
-    where \((W_{i,j})\) is a family of learnable linear maps
-    \(\RR^{c_\text{in}}\rightarrow \RR^{c_\text{out}}\) called the
-    \textit{kernel} of the convolutional layer, and \(b\in\RR^{c_\text{out}}\) a learnable vector
-    called the \textit{bias} of the convolutional layer. The output has width \(w'+1\) and
-    height \(h'+1\).
-  </p>
-\end{def}
 
-\begin{thm}\label{thm-conv-equivariance}
-  <p>For \(a,b\in\ZZ\), write \(T_a\) for \(T_{a,1}\), the shift \(e_n\mapsto e_{n-a}\), and
-    \(S_{a,b}=\mathrm{id}\otimes T_a\otimes T_b\) for the shift by \((a,b)\) of an input or an
-    output. A linear map \(K\) from inputs to outputs commutes with all shifts,
+\subsection{Images as modules}\label{sec-images-modules}
+<p>For \(c\in\NN\) let \(\mathcal{F}_c\) be the space of finitely supported functions
+  \(\ZZ^2\to\RR^c\).
+</p>
+\begin{thm}\label{thm-images-functions}
+  <p>The linear map
     \[
-      K\circ S_{a,b}=S_{a,b}\circ K\qquad\forall a,b\in\ZZ,
+      \RR^c\otimes\RR^{\oplus\ZZ^2}\longrightarrow\mathcal{F}_c,\qquad
+      v\otimes e_q\longmapsto\bigl(q'\mapsto v\text{ if }q'=q,\ 0\text{ otherwise}\bigr)
     \]
-    if and only if there are a finite set \(F\subset\ZZ^2\) and linear maps
-    \(W_{i,j}:\RR^{c_\text{in}}\to\RR^{c_\text{out}}\), \((i,j)\in F\), such that
-    \[
-      K=\sum_{(i,j)\in F}W_{i,j}\otimes T_i\otimes T_j.
-    \]
-  </p>
-  <p>In particular, the linear part \(\sum_{i,j=0}^{k-1}W_{i,j}\otimes T_i\otimes T_j\) of a
-    convolutional layer with stride \(1\) and no padding (<a data-ref="def-convolution"></a>)
-    is shift-equivariant: shifting the input shifts the output by the same amount.
+    is an isomorphism. Its inverse sends \(y\) to \(\sum_{q\in\ZZ^2}y(q)\otimes e_q\).
   </p>
 \end{thm}
 \begin{proof}
-  <p>\textit{If.} \(T_iT_a=T_{i+a}=T_aT_i\), so each term \(W_{i,j}\otimes T_i\otimes T_j\)
-    commutes with \(S_{a,b}\), and hence so does their sum.
+  <p>Tensor products commute with direct sums, so
+    \(\RR^c\otimes\RR^{\oplus\ZZ^2}=\RR^c\otimes\bigoplus_{q}\RR e_q\cong\bigoplus_{q}\RR^c\), and
+    \(\bigoplus_q\RR^c\) is exactly \(\mathcal{F}_c\). The given map is this isomorphism.
   </p>
-  <p>\textit{Only if.} Since \(K(v\otimes e_0\otimes e_0)\) depends linearly on \(v\), there are
-    linear maps \(A_{m_1,m_2}:\RR^{c_\text{in}}\to\RR^{c_\text{out}}\) with
-    \[
-      K(v\otimes e_0\otimes e_0)=\sum_{m_1,m_2\in\ZZ}A_{m_1,m_2}(v)\otimes e_{m_1}\otimes e_{m_2}
-      \qquad\forall v\in\RR^{c_\text{in}},
-    \]
-    and only finitely many \(A_{m_1,m_2}\) are nonzero, because the images of a basis of
-    \(\RR^{c_\text{in}}\) have finite support. Put \(W_{i,j}=A_{-i,-j}\), let \(F\) be the set of
-    \((i,j)\) with \(W_{i,j}\neq0\), and let \(L=\sum_{(i,j)\in F}W_{i,j}\otimes T_i\otimes T_j\).
-    Since \(T_ie_0=e_{-i}\), we get \(L(v\otimes e_0\otimes e_0)=K(v\otimes e_0\otimes e_0)\).
+\end{proof}
+<p>From now on, inputs and outputs are identified with elements of \(\mathcal{F}_{c_\text{in}}\) and
+  \(\mathcal{F}_{c_\text{out}}\), and \(y(q)\) is the \textit{value} of \(y\) at the pixel \(q\). An
+  input of \textit{width} \(w\in\NN\) and \textit{height} \(h\in\NN\) is an \(x\in\mathcal{F}_{c_\text{in}}\)
+  supported in \(\{0,\dots,w-1\}\times\{0,\dots,h-1\}\).
+</p>
+<p>For \(u\in\ZZ^2\), the \textit{shift} \(S_u\) acts on every \(\mathcal{F}_c\) by
+  \[
+    (S_uy)(q)=y(q+u),
+  \]
+  i.e. \(S_u(v\otimes e_q)=v\otimes e_{q-u}\). These shifts satisfy \(S_uS_{u'}=S_{u+u'}\) and
+  \(S_0=\mathrm{id}\). So \(\ZZ^2\) acts on \(\mathcal{F}_c\), which makes \(\mathcal{F}_c\) a module over
+  the group algebra
+  \[
+    A=\RR[\ZZ^2]=\RR[t_1^{\pm1},t_2^{\pm1}],
+  \]
+  the ring of Laurent polynomials, with \(t^m=t_1^{m_1}t_2^{m_2}\) acting as \(S_{-m}\). Explicitly, for
+  \(a=\sum_m a_mt^m\in A\),
+  \[
+    (a\cdot y)(q)=\sum_{m\in\ZZ^2}a_m\,y(q-m),
+  \]
+  so the module structure is convolution with scalar filters. Identifying \(e_q\) with \(t^q\) gives
+  \(\RR^{\oplus\ZZ^2}=A\), and hence \(\mathcal{F}_c\cong\RR^c\otimes A\cong A^c\), a free \(A\)-module of
+  rank \(c\) with basis \(\epsilon_\ell\otimes1\), where \((\epsilon_\ell)\) is the standard basis of
+  \(\RR^c\).
+</p>
+<p>A linear map \(K:\mathcal{F}_{c_\text{in}}\to\mathcal{F}_{c_\text{out}}\) commutes with all shifts
+  if and only if it is \(A\)-linear, since \(A\) is spanned by the monomials \(t^m\), which act as
+  shifts.
+</p>
+
+\subsection{Convolutional layers}
+\begin{def}\label{def-local-equivariant}
+  <p>Let \(s\in\NN\) and let \(B\subset\ZZ^2\) be finite. A linear map
+    \(K:\mathcal{F}_{c_\text{in}}\to\mathcal{F}_{c_\text{out}}\) is
   </p>
-  <p>For any \(n_1,n_2\in\ZZ\), \(v\otimes e_{n_1}\otimes e_{n_2}=S_{-n_1,-n_2}(v\otimes e_0\otimes e_0)\).
-    Both \(K\) and \(L\) commute with shifts (\(L\) by the first part), so
+  <ul>
+    <li>\textit{\(s\)-equivariant} if \(K\circ S_{su}=S_u\circ K\) for all \(u\in\ZZ^2\): shifting the
+      input by \(s\) pixels shifts the output by one pixel;</li>
+    <li>\textit{\(B\)-local} if \((Kx)(0)=0\) whenever \(x\) vanishes on \(B\): the output at the pixel
+      \(0\) only sees the input on \(B\).</li>
+  </ul>
+  <p>If \(K\) is \(s\)-equivariant and \(B\)-local, then \((Kx)(q)=\bigl(K(S_{sq}x)\bigr)(0)\), and
+    \(S_{sq}x\) vanishes on \(B\) if and only if \(x\) vanishes on \(sq+B\). So the output at the
+    pixel \(q\) only sees the input on the patch \(sq+B\).
+  </p>
+\end{def}
+
+\begin{thm}\label{thm-equivariant-maps}
+  <p>A linear map \(K:\mathcal{F}_{c_\text{in}}\to\mathcal{F}_{c_\text{out}}\) is \(s\)-equivariant if
+    and only if there is a finitely supported family \((K_u)_{u\in\ZZ^2}\) of linear maps
+    \(\RR^{c_\text{in}}\to\RR^{c_\text{out}}\) such that
     \[
-      K(v\otimes e_{n_1}\otimes e_{n_2})
-        =S_{-n_1,-n_2}K(v\otimes e_0\otimes e_0)
-        =S_{-n_1,-n_2}L(v\otimes e_0\otimes e_0)
-        =L(v\otimes e_{n_1}\otimes e_{n_2}).
+      (Kx)(q)=\sum_{u\in\ZZ^2}K_u\,x(sq+u)\qquad\forall x\in\mathcal{F}_{c_\text{in}},\ q\in\ZZ^2.
     \]
-    These vectors span the domain, so \(K=L\).
+    The family is unique, namely \(K_uv=K(v\otimes e_u)(0)\). Moreover, \(K\) is \(B\)-local if and
+    only if \(K_u=0\) for all \(u\notin B\).
+  </p>
+  <p>In tensor notation, let \(T^s_u:\RR^{\oplus\ZZ^2}\to\RR^{\oplus\ZZ^2}\) send \(e_n\) to
+    \(e_{(n-u)/s}\) if \((n-u)/s\in\ZZ^2\), and to \(0\) otherwise, so that \((T^s_uy)(q)=y(sq+u)\). Then
+    the formula reads
+    \[
+      K=\sum_{u\in\ZZ^2}K_u\otimes T^s_u .
+    \]
+  </p>
+\end{thm}
+\begin{proof}
+  <p>\textit{If.} For \(x\in\mathcal{F}_{c_\text{in}}\) and \(q,u\in\ZZ^2\),
+    \[
+      \bigl(KS_{su}x\bigr)(q)=\sum_mK_m\,x(sq+m+su)=\sum_mK_m\,x\bigl(s(q+u)+m\bigr)
+        =(Kx)(q+u)=\bigl(S_uKx\bigr)(q).
+    \]
+  </p>
+  <p>\textit{Only if.} Put \(K_uv=K(v\otimes e_u)(0)\). For \(n,q\in\ZZ^2\) we have
+    \(v\otimes e_n=S_{-sq}(v\otimes e_{n-sq})\), so \(s\)-equivariance gives
+    \[
+      K(v\otimes e_n)(q)=\bigl(S_{-q}K(v\otimes e_{n-sq})\bigr)(q)=K(v\otimes e_{n-sq})(0)
+        =K_{n-sq}\,v .
+    \]
+    This is the claimed formula for \(x=v\otimes e_n\), since the right side then has the single
+    term \(u=n-sq\). Both sides are linear in \(x\), so the formula holds for all \(x\).
+  </p>
+  <p>\textit{Finite support.} Write \(u=r+sm\) with \(r\in\{0,\dots,s-1\}^2\) and \(m\in\ZZ^2\). Then
+    \(K(v\otimes e_u)=S_{-m}K(v\otimes e_r)\), so \(K_uv=K(v\otimes e_r)(-m)\). For each of the
+    \(s^2\) residues \(r\) and each basis vector \(v\), the output \(K(v\otimes e_r)\) has finite
+    support, so only finitely many \(K_u\) are nonzero.
+  </p>
+  <p>\textit{Uniqueness.} Put \(x=v\otimes e_u\) and \(q=0\) in the formula: \((Kx)(0)=K_uv\).
+  </p>
+  <p>\textit{Locality.} By the formula, \((Kx)(0)=\sum_uK_u\,x(u)\). If \(K_u=0\) for \(u\notin B\),
+    this vanishes whenever \(x\) vanishes on \(B\). Conversely, if \(u\notin B\), then
+    \(x=v\otimes e_u\) vanishes on \(B\), so \(B\)-locality gives \(0=(Kx)(0)=K_uv\) for all \(v\).
+  </p>
+\end{proof}
+<p class="remark"><strong>In module language.</strong> For \(s=1\), the theorem is the familiar fact
+  that a homomorphism of free modules is a matrix over the ring:
+  \[
+    \mathrm{Hom}_A\bigl(A^{c_\text{in}},A^{c_\text{out}}\bigr)\cong M_{c_\text{out}\times c_\text{in}}(A),
+    \qquad K\longmapsto\sum_{u}K_u\,t^{-u},
+  \]
+  determined by the images of the basis vectors \(\epsilon_\ell\otimes1\). Composing stride-\(1\)
+  maps multiplies these polynomial matrices, and the support of \((K_u)\) is the set of exponents
+  that occur, up to sign. For general \(s\), let
+  \(A_s=\RR[t_1^{\pm s},t_2^{\pm s}]\) and \(\varphi:A_s\to A\), \(t^{sm}\mapsto t^m\). Then
+  \(s\)-equivariance says \(K(ax)=\varphi(a)K(x)\) for \(a\in A_s\), i.e. \(K\) is
+  \(\varphi\)-semilinear. Over \(A_s\), the module \(A\) is free with basis \(t^r\),
+  \(r\in\{0,\dots,s-1\}^2\), which is why the residues \(r\) appear in the finiteness argument.
+</p>
+
+\begin{def}\label{def-convolution}
+  <p>Let \(k,s\in\NN\) and \(p\in\NN\cup\{0\}\) with \(w+2p\geqslant k\) and \(h+2p\geqslant k\). Put
+    \(w'=\lfloor (w+2p-k)/s\rfloor\), \(h'=\lfloor (h+2p-k)/s\rfloor\),
+    \[
+      B=\{-p,\dots,k-1-p\}^2,\qquad\Omega=\{0,\dots,w'\}\times\{0,\dots,h'\}.
+    \]
+    A 2D \textit{convolutional layer} of \textit{size} \(k\), \textit{stride} \(s\), with
+    \textit{padding} \(p\), is a map \(f:\mathcal{F}_{c_\text{in}}\to\mathcal{F}_{c_\text{out}}\) of
+    the form
+    \[
+      f(x)(q)=
+      \begin{cases}
+        b+(Kx)(q) &amp; \text{if }q\in\Omega\\
+        0 &amp; \text{otherwise}
+      \end{cases}
+    \]
+    where \(K\) is an \(s\)-equivariant, \(B\)-local linear map and \(b\in\RR^{c_\text{out}}\) is a
+    learnable vector called the \textit{bias}. The family \(W_{i,j}=K_{(i-p,j-p)}\),
+    \(i,j\in\{0,\dots,k-1\}\), of learnable linear maps \(\RR^{c_\text{in}}\to\RR^{c_\text{out}}\) is
+    called the \textit{kernel}, and \(\Omega\) the \textit{output window}. The output has width
+    \(w'+1\) and height \(h'+1\).
+  </p>
+\end{def}
+\begin{thm}\label{thm-pixelwise}
+  <p>A convolutional layer is given pixelwise by
+    \[
+      f(x)(q)=b+\sum_{i,j=0}^{k-1}W_{i,j}\,x\bigl(sq+(i-p,\,j-p)\bigr)\qquad\forall q\in\Omega,
+    \]
+    i.e. its linear part is \(\sum_{i,j=0}^{k-1}W_{i,j}\otimes T^s_{i-p,j-p}\), writing
+    \(T^s_{i,j}=T^s_{(i,j)}\). Moreover, \(\Omega\) is exactly the set of pixels \(q\in\ZZ^2\)
+    whose patch \(sq+B\) lies inside the padded input
+    \(\{-p,\dots,w-1+p\}\times\{-p,\dots,h-1+p\}\).
+  </p>
+\end{thm}
+\begin{proof}
+  <p>The formula is <a data-ref="thm-equivariant-maps"></a>, with \(K_u=0\) for \(u\notin B\) by
+    locality and \(u=(i-p,j-p)\) running over \(B\). For the window, the patch
+    \(sq+B\) has first coordinates \(sq_1-p,\dots,sq_1+k-1-p\). These lie in \(\{-p,\dots,w-1+p\}\)
+    if and only if \(sq_1-p\geqslant-p\) and \(sq_1+k-1-p\leqslant w-1+p\), i.e.
+    \(0\leqslant q_1\leqslant(w+2p-k)/s\), i.e. \(0\leqslant q_1\leqslant w'\). The same holds for the second coordinate.
   </p>
 \end{proof}
 
 \subsection{Why parameters are shared across pixels}\label{sec-shared-parameters}
-<p>For \(q=(q_1,q_2)\in\ZZ^2\) write \(e_q=e_{q_1}\otimes e_{q_2}\), and for a tensor
-  \(y=\sum_{q\in\ZZ^2}y(q)\otimes e_q\) call \(y(q)\) the \textit{value} of \(y\) at the pixel \(q\).
-  For \(u=(u_1,u_2)\in\ZZ^2\) write \(S_u=S_{u_1,u_2}\). Since \(T_ae_n=e_{n-a}\),
-  \[
-    (S_uy)(q)=y(q+u)\qquad\forall q,u\in\ZZ^2.
-  \]
-  Shifts never commute with a layer that has a nonzero bias, since the bias is supported on the
-  finite output window. The right notion is therefore equivariance away from the edges of the window.
+<p>Shifts never commute with a layer that has a nonzero bias, since the output is supported on
+  the finite output window. The right notion is therefore equivariance away from the edges of the
+  window. For simplicity, take stride \(1\) in this subsection.
 </p>
 \begin{def}\label{def-equivariant-on}
   <p>Let \(\Omega\subset\ZZ^2\). A map \(f\) from inputs to outputs is
@@ -105,27 +193,22 @@
 \end{def}
 
 \begin{thm}\label{thm-shared-bias}
-  <p>Let \(\Omega\subset\ZZ^2\), let \(K\) be a linear map from inputs to outputs commuting with all
-    shifts, and let \(b_q\in\RR^{c_\text{out}}\) for \(q\in\Omega\). The map
-    \[
-      f(x)=Kx+\sum_{q\in\Omega}b_q\otimes e_q
-    \]
-    is equivariant on \(\Omega\) if and only if \(b_q\) does not depend on \(q\).
+  <p>Let \(\Omega\subset\ZZ^2\), let \(K:\mathcal{F}_{c_\text{in}}\to\mathcal{F}_{c_\text{out}}\) be
+    \(1\)-equivariant, and let \(b_q\in\RR^{c_\text{out}}\) for \(q\in\Omega\). The map \(f\) with
+    \(f(x)(q)=b_q+(Kx)(q)\) for \(q\in\Omega\), and \(f(x)(q)=0\) otherwise, is equivariant on
+    \(\Omega\) if and only if \(b_q\) does not depend on \(q\).
   </p>
   <p>In particular, a convolutional layer (<a data-ref="def-convolution"></a>) with stride \(1\)
-    and any padding is equivariant on its output window
-    \(\Omega=\{0,\dots,w'\}\times\{0,\dots,h'\}\), because its linear part
-    \(\sum_{i,j}W_{i,j}\otimes T_{i-p}\otimes T_{j-p}\) commutes with all shifts
-    (<a data-ref="thm-conv-equivariance"></a>). A bias that varied from pixel to pixel would break
-    this.
+    and any padding is equivariant on its output window. A bias that varied from pixel to pixel
+    would break this.
   </p>
 \end{thm}
 \begin{proof}
   <p>Let \(q,q+u\in\Omega\). Since \(K\) commutes with \(S_u\),
     \[
       \begin{aligned}
-        f(S_ux)(q)&amp;=(S_uKx)(q)+b_q=(Kx)(q+u)+b_q,\\
-        \bigl(S_uf(x)\bigr)(q)&amp;=f(x)(q+u)=(Kx)(q+u)+b_{q+u}.
+        f(S_ux)(q)&amp;=b_q+(S_uKx)(q)=b_q+(Kx)(q+u),\\
+        \bigl(S_uf(x)\bigr)(q)&amp;=f(x)(q+u)=b_{q+u}+(Kx)(q+u).
       \end{aligned}
     \]
     So \(f\) is equivariant on \(\Omega\) if and only if \(b_q=b_{q+u}\) whenever
@@ -135,21 +218,22 @@
 \end{proof}
 
 <p>At inference, batch normalisation acts on the value of an output \(y\) at each pixel by an
-  affine map. Allowing separate parameters at each pixel \(q\in\Omega\), it is
+  affine map. Allowing separate parameters at each pixel \(q\in\Omega\), it is the map \(g\) with
   \[
-    g(y)=\sum_{q\in\Omega}\bigl(D_q\,y(q)+\beta'_q\bigr)\otimes e_q,
+    g(y)(q)=D_q\,y(q)+\beta'_q\quad(q\in\Omega),
     \qquad
     D_q=\mathrm{diag}\Bigl(\frac{\gamma_\ell}{\sigma_{\ell,q}}\Bigr)_{\ell},
     \quad
     \beta'_q=\Bigl(\beta_\ell-\frac{\gamma_\ell\,\mu_{\ell,q}}{\sigma_{\ell,q}}\Bigr)_{\ell},
   \]
-  where \(\ell\) runs over the channels, \(\mu_{\ell,q}\) and \(\sigma_{\ell,q}^2\) are the mean and
-  variance used for channel \(\ell\) at pixel \(q\), and \(\gamma_\ell,\beta_\ell\) are the learnable
-  scale and shift.
+  and \(g(y)(q)=0\) for \(q\notin\Omega\). Here \(\ell\) runs over the channels, \(\mu_{\ell,q}\) and
+  \(\sigma_{\ell,q}^2\) are the mean and variance used for channel \(\ell\) at pixel \(q\), and
+  \(\gamma_\ell,\beta_\ell\) are the learnable scale and shift.
 </p>
 \begin{thm}\label{thm-batch-norm}
   <p>Let \(\Omega\subset\ZZ^2\), and for \(q\in\Omega\) let \(D_q:\RR^{c}\to\RR^{c}\) be linear and
-    \(\beta'_q\in\RR^{c}\). Let \(g(y)=\sum_{q\in\Omega}\bigl(D_q\,y(q)+\beta'_q\bigr)\otimes e_q\).
+    \(\beta'_q\in\RR^{c}\). Let \(g(y)(q)=D_q\,y(q)+\beta'_q\) for \(q\in\Omega\), and \(g(y)(q)=0\)
+    otherwise.
   </p>
   <ol>
     <li>\(g\) is equivariant on \(\Omega\) if and only if \(D_q\) and \(\beta'_q\) do not depend
@@ -185,16 +269,16 @@
     \]
   </p>
   <p>\textit{In particular.} If \(\mu_{\ell,q}\) and \(\sigma_{\ell,q}\) are constant,
-    then so are \(D_q\) and \(\beta'_q\), and part 2 applies. For the \textit{only if} direction, take \(f=\mathrm{id}\),
-    which is equivariant on every \(\Omega\). Then \(g\circ f=g\) is equivariant on \(\Omega\), so by
-    part 1, \(D_q\) and \(\beta'_q\) are constant. Since \(\gamma_\ell\neq0\), \(D_q\) constant means
-    \(\sigma_{\ell,q}\) is constant, and then \(\beta'_q\) constant means \(\mu_{\ell,q}\) is
-    constant.
+    then so are \(D_q\) and \(\beta'_q\), and part 2 applies. For the \textit{only if} direction,
+    take \(f=\mathrm{id}\), which is equivariant on every \(\Omega\). Then \(g\circ f=g\) is
+    equivariant on \(\Omega\), so by part 1, \(D_q\) and \(\beta'_q\) are constant. Since
+    \(\gamma_\ell\neq0\), \(D_q\) constant means \(\sigma_{\ell,q}\) is constant, and then
+    \(\beta'_q\) constant means \(\mu_{\ell,q}\) is constant.
   </p>
 \end{proof}
 <p class="remark"><strong>Estimating the statistics.</strong> The theorem says only that the mean
   and variance must be shared across pixels. It does not say how to estimate them. Pooling over the
   batch and all pixels is a good estimate when the data are roughly stationary, i.e. feature
-  \(\ell\) has about the same distribution at every pixel. Then all \(B\cdot\lvert\Omega\rvert\)
-  values of channel \(\ell\) in a batch of size \(B\) are samples of the same quantity.
+  \(\ell\) has about the same distribution at every pixel. Then all \(N\cdot\lvert\Omega\rvert\)
+  values of channel \(\ell\) in a batch of size \(N\) are samples of the same quantity.
 </p>
